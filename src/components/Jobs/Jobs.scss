@@ -1,0 +1,56 @@
+.dropdown-menu>a:hover {
+    background-color: rgb(70, 73, 80);
+    color:white;
+}
+.dropdown-menu {
+    margin-right: 0;
+    min-width: 4px;
+}
+.dropdown-menu>a {
+    font-size: 12px;
+}
+
+.div_item {
+    background-color: rgba(82, 83, 85, 0.527); 
+    border-radius: 5px;
+}
+.button{
+    padding:0 15px 5px 15px; 
+    height: 40px; 
+    border-radius: 50%;
+}
+.font_size{
+    color: white; 
+    padding: 12px; 
+    font-size: 18px;
+}
+.perjob{
+    background-color: white; 
+    border-radius: 5px; 
+    padding: 20px;
+}
+.background {
+    background: url('https://files.slack.com/files-pri/TH1RHBXSQ-FQXBM4CLE/wallpaper.jpg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+// .background {
+//     background: url('https://files.slack.com/files-pri/TH1RHBXSQ-FQXBM4CLE/wallpaper.jpg')
+// }
+.active{
+    background-color: #0099FF;
+    // color: white;
+    // border: 1px solid #0099FF;
+    // height: 100%;
+    cursor: pointer;
+    padding: 0px 15px;
+    color: white
+    // margin-left: 20px; 
+    // margin-right: 20px
+}
+.page_div{
+    height: 100%;
+    cursor: pointer;
+    margin: 0px 15px
+}

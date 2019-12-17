@@ -1,0 +1,32 @@
+$color: #fff;
+
+#header{
+    background-color: #000000E6;
+    color: $color;
+}
+#header img {
+    width: 50px;
+    border-radius: 50%;
+}
+.dropdown-menu>a:hover {
+    background-color: rgb(125, 134, 156);
+    color: $color;
+}
+.dropdown-menu {
+    margin-right: 0;
+}
+.dropdown-menu>a {
+    font-size: 12px;
+}
+nav>a {
+    color: $color;
+}
+nav>a:hover { 
+    color: #FF7F50;
+}
+div>a{
+    color: $color;
+}
+div>a:hover {
+    color: #FF7F50;
+}

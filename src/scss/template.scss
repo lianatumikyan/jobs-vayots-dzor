@@ -1,0 +1,157 @@
+@import '../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../components/Jobs/Jobs.scss';
+@import '../components/Settings/EmployeeSetting.scss';
+@import '../components/App.scss';
+@import '../components/AboutUs.scss';
+@import '../components/Settings/ChangePassword.scss';
+
+$primary-color: red;
+$bg-color: #F1F2F3;
+$color: #fff;
+
+#menu{
+    background: url('https://www.frescodesign.com.hk/wp-content/uploads/how-digital-marketing-can-help-your-business-grow.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
+    height: 650px;
+   
+}
+.text{
+    color: #343a40;
+    border: 0;  
+}
+.button_margin button{
+    margin: 0 45px
+}
+
+.main_part_text div{
+    margin: 20px;
+}
+.main_page_text p {
+    font-size: 50px;
+    margin: -13px
+}
+// footer{
+//     background-color: #000000c9;
+//     color: $color;
+// }
+
+footer{
+    position: fixed;
+    bottom: 0;
+}
+
+footer p {
+    margin-bottom: 0; 
+    text-align: center; 
+    background-color: black; 
+    color: white;
+    padding: 10px
+}
+
+a{
+    color: #495057;
+}
+
+.signPart{
+    width: 400px;
+    background-color: rgba(0,0,0,0.5) !important;
+}
+
+.user_margin div {
+    margin: 15px
+}
+.perjob_body{
+    background-color: #F1F2F3;
+    padding: 0;
+}
+.perjob_size{
+    padding: 25px 0;
+}
+.job_image_size {
+    width: 100px;
+    height: 100px;
+    border-radius: 50px;
+}
+
+    
+span:hover{
+    cursor: pointer;
+}
+.card-header h3{
+    color: $color;
+}
+
+.input-group-prepend span{
+    width: 50px;
+    background-color: #ecd52e;
+    // background-color: rgb(165, 23, 170);
+    border:0 !important;
+}
+
+.remember{
+    color: $color;
+}
+
+.remember input{
+    margin-left: 15px;
+    margin-right: 5px;
+}
+    
+.login_btn{
+    color: #000;
+    background-color: #ecd52e;
+    // background-color: rgb(165, 23, 170);
+}
+
+.login_btn:hover{
+    color: #000;
+    background-color: $color;
+}
+
+// ---employeeSetting
+
+.avatar_img {
+    height: 200px;
+    width: 45%;
+    border-radius: 13%;
+
+}
+.input_file{
+    bottom: 0;
+    z-index: 1;
+}
+label{
+    margin:0
+}
+.button_delete{
+    left: 0;
+    border: 0; 
+    z-index: 1
+}
+
+#input_container {
+    position:relative;
+}
+#email_icon, #password_icon {
+    position:absolute;
+    right: 0;
+    top: 25%;
+    color: red;
+}
+.error_message_p{
+    opacity: 0;
+    top: 35%;
+    color: red;
+    font-size: 12px;
+    background-color: #fff;
+    border: 1px solid;
+    padding: 3px;
+    border-radius: 5px;
+    margin-left: 25px;
+}
+.error_message_i{
+    opacity: 1;
+}

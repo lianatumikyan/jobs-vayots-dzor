@@ -1,0 +1,48 @@
+.label:before{
+    content:'';
+    background-color: transparent;
+}
+.label:hover:after{
+    background-color: dimgray;
+    color: white;
+    content: 'X';
+}
+
+img {
+    width: 100px;
+    border-radius: 50%;
+}
+.avatar_img {
+    width: 100px;
+    border-radius: 50%;
+}
+
+.img-wraps {
+    position: relative;
+    display: inline-block;
+    text-align: center;
+}
+.img-wraps .closes {
+    display: none;
+    position: absolute;
+    top: 28px;
+    left: 38px;
+    background-color: transparent;
+    padding: 4px 3px;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+    font-size: 22px;
+}
+.img-responsive:hover {
+    opacity: 0.3;
+    cursor: pointer;
+    transform: scale(1.2);
+}
+.img-wraps:hover .closes {
+    display: inline-block;
+}
+.setting_div{
+    background-color: honeydew; 
+    padding: 40px 60px; 
+}
