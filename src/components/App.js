@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react'
+import i18n from '../services/i18n'
 import { BrowserRouter, Link, Switch, Route, useLocation, useHistory } from 'react-router-dom'
 import Home from './Home'
 import AboutUs from './AboutUs'
@@ -13,6 +14,7 @@ import EditJob from './Settings/EditJob'
 import CreateJob from './Settings/CreateJob'
 import OneJob from './Jobs/OneJob'
 import OneTalent from './Talents/OneTalent'
+import {useTranslation} from "react-i18next";
 
 const withRouter = Component => (props) => {
     return (
@@ -23,6 +25,8 @@ const withRouter = Component => (props) => {
 }
 
 const App = () => {
+    const { t } = useTranslation();
+    const language = localStorage.getItem('language');
 
     const [user, setUser]  = useState(null)
 
@@ -39,6 +43,12 @@ const App = () => {
             } )
             .catch(console.log)
     }
+
+    const changeLanguage = value => {
+        i18n.changeLanguage(value.toLowerCase(), (err) => {
+            if (err) return console.log('something went wrong while changing language', err);
+        });
+    };
 
     const [allJobs, setAllJobs] = useState([])
     const [page, setPage] = useState(1)
@@ -91,9 +101,9 @@ const App = () => {
                             <Link to='/'>
                                 <img src = "./logo.jpg"/>
                             </Link>
-                            <Link to='/about-us'className="flex-sm-fill text-sm-center nav-link mt-2" >About Us</Link>
-                            <Link to='/jobs' className="flex-sm-fill text-sm-center nav-link mt-2">Jobs</Link>
-                            <Link to='/talents'className="flex-sm-fill text-sm-center nav-link mt-2">Talents</Link>
+                            <Link to='/about-us'className="flex-sm-fill text-sm-center nav-link mt-2" >{t('app.about_us')}</Link>
+                            <Link to='/jobs' className="flex-sm-fill text-sm-center nav-link mt-2">{t('app.jobs')}</Link>
+                            <Link to='/talents'className="flex-sm-fill text-sm-center nav-link mt-2">{t('app.talents')}</Link>
                         </nav>
                     </div>
                     <div className = "d-flex">
@@ -108,14 +118,16 @@ const App = () => {
                                 <Link to='/sign-up' key = "signUp" className="flex-sm-fill text-sm-center nav-link mt-2">Sign Up</Link>
                             ])}
                         </div>
-                        <div className="dropdown mt-2">
-                            <button className="btn btn-info dropdown-toggle bg-transparent" data-toggle="dropdown">
-                                EN
-                            </button>
-                            <div className="dropdown-menu">
-                                <a href="#AM" className="dropdown-item" type="btn-link">AM</a>
-                                <a href="#RU" className="dropdown-item" type="btn-link">RU</a>
-                            </div>
+                        <div className="form-group">
+                            <select
+                                defaultValue={language? language.toUpperCase() : 'EN'}
+                                className="form-control text-white bg-transparent mt-2" id="sel1"
+                                onChange={e => changeLanguage(e.target.value)}
+                            >
+                                <option>EN</option>
+                                <option>AM</option>
+                                <option>RU</option>
+                            </select>
                         </div>
                     </div>
                 </nav>
