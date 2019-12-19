@@ -3,25 +3,27 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 import './Talent.scss'
 
-const Talents = () => {
+const Talents = ({allTalents, talentPageCount, getTalents, setQuery}) => {
 
-    const [notes, setNotes] = useState([])
+    // const [notes, setNotes] = useState([])
     const [page, setPage] = useState(1)
-    const [pageCount, setPageCount] = useState(null)
+    // const [pageCount, setPageCount] = useState(null)
 
-    const getTalents = () => {
-        const limit = 4;
-        const offset = (page-1) * limit
+    // const getTalents = () => {
+    //     const limit = 4;
+    //     const offset = (page-1) * limit
 
-        axios
-            .get('http://localhost:3020/v1/users', { params: { limit, offset, type: 'employee' } })
-            .then(response => {
-                setPageCount(response.data._meta.pageCount)
-                setNotes(response.data.users)              
-            })
-            .catch(console.log)
+    //     axios
+    //         .get('http://localhost:3020/v1/users', { params: { limit, offset, type: 'employee' } })
+    //         .then(response => {
+    //             console.log(response, 'talents')
+    //             setPageCount(response.data._meta.pageCount)
+    //             setNotes(response.data.users)  
+    //             setTalentsCount(response.data._meta.total)            
+    //         })
+    //         .catch(console.log)
 
-    }
+    // }
 
     useEffect(() => {
         getTalents()
@@ -30,7 +32,7 @@ const Talents = () => {
     const pageLimit = 5
 
     const pageNumbers = [];
-    for (let i = 1; i <= pageCount; i++) {
+    for (let i = 1; i <= talentPageCount; i++) {
         pageNumbers.push(i);
     }
     const staticPageNumbers = [1, 2, 3, 4, 5]
@@ -45,9 +47,12 @@ const Talents = () => {
                         </div>
                         <div className="d-flex ml-4">
                             <div className="row md-form col-md-11 d-flex">
-                                <input className="form-control" type="search" placeholder="Search"/>
+                                <input className="form-control" type="search" placeholder="Search"
+                                    onChange = {(e) => setQuery(e.target.value)}
+                                    onKeyUp={(e) => {if (e.keyCode === 13) getTalents()}}
+                                />
                             </div>
-                            <button className="btn btn-info form-control">
+                            <button className="btn btn-info form-control" onClick = {getTalents}>
                                 <i className="fa fa-search fa-fw"></i>
                             </button>
                         </div>
@@ -57,7 +62,7 @@ const Talents = () => {
                             <p className = "font_size div_item">All Talents</p>
                         </div>
                         <div className = "col-md-11 perjob ml-3 shadow-lg" style={{height: 700+'px'}}>
-                        {notes.map((note, i) => {
+                        {allTalents.map((note, i) => {
                             return (<div key={`note-${i}`} className = "d-flex justify-content-start position-relative border-bottom">
                                 <div className = "d-flex align-items-start user_margin" >
                                     <div>
@@ -102,9 +107,9 @@ const Talents = () => {
                             Previous
                         </button>
                     )}
-                    {pageCount > 1 && (
+                    {talentPageCount > 1 && (
                         <div className = "pagination d-flex justify-content-center">
-                        {pageLimit >= pageCount && (
+                        {pageLimit >= talentPageCount && (
                             pageNumbers.map((number, e) => {
                                 if(page === number) {
                                     return (
@@ -120,7 +125,7 @@ const Talents = () => {
                                     ) 
                             })
                         )}
-                        {pageLimit< pageCount && (
+                        {pageLimit< talentPageCount && (
                             staticPageNumbers.map(number => {
                                 if(page === number) {
                                     return (
@@ -138,7 +143,7 @@ const Talents = () => {
                         )}
                     </div>
                     )}
-                    {page < pageCount && (
+                    {page < talentPageCount && (
                         <button onClick={() => setPage(page + 1)}>
                             Next
                         </button>

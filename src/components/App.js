@@ -53,21 +53,66 @@ const App = () => {
     const [allJobs, setAllJobs] = useState([])
     const [page, setPage] = useState(1)
     const [pageCount, setPageCount] = useState(null)
+    const [jobCount, setJobCount] = useState(null)
+
+
+    const [allTalents, setAllTalents] = useState([])
+    const [talentPageCount, setTalentPageCount] = useState(null)
+    const [talentCount, setTalentCount] = useState(null)
+    const [employersCount, setEmployersCount] = useState(null)
+    const [query, setQuery] = useState('')
 
     const getAllJobs = () => {
         const limit = 4;
         const offset = (page-1) * limit
+        let q = query
 
         axios
-            .get(`http://localhost:3020/v1/jobs?limit=${limit}&offset=${offset}`,{
+            .get('http://localhost:3020/v1/jobs',
+            {
+                params: { limit, offset, type: 'employers', q },
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             })
             .then(response => {
+                console.log(q, 'q')
+                console.log(response, 'jobs')
                 setAllJobs(response.data.jobs)
                 setPageCount(response.data._meta.pageCount)
+                setJobCount(response.data._meta.total)
                 
+            })
+            .catch(console.log)
+
+    }
+
+    const getTalents = () => {
+        const limit = 4;
+        const offset = (page-1) * limit
+        let q = query
+
+        axios
+            .get('http://localhost:3020/v1/users', { params: { limit, offset, q, type: 'employee' } })
+            .then(response => {
+                // console.log(response, 'talents')
+                setAllTalents(response.data.users)
+                setTalentPageCount(response.data._meta.pageCount)
+                setTalentCount(response.data._meta.total)
+           
+            })
+            .catch(console.log)
+
+    }
+
+    const getEmployers = () => {
+
+        axios
+            .get('http://localhost:3020/v1/users', { params: { accountType: 'employers' } })
+            .then(response => {
+                // console.log(response, 'employers')
+                setEmployersCount(response.data._meta.total)
+           
             })
             .catch(console.log)
 
@@ -87,6 +132,8 @@ const App = () => {
 
     useEffect(() => {
         getAllJobs()
+        getTalents()
+        getEmployers()
         if (localStorage.getItem('token')) {
             getUser()
         }
@@ -111,7 +158,9 @@ const App = () => {
                         {user  ? ([
                                 <Link to='/settings' key = 'setting' className="flex-sm-fill text-sm-center nav-link mt-2">Settings</Link>,
                                 <Link to='/logout' key = "logOut" className="flex-sm-fill text-sm-center nav-link mt-2"
-                                onClick={logout}>Sign Out
+                                onClick={logout}>
+                                    {t('app.signOut')}
+                                    {/* Sign Out */}
                                 </Link>
                             ]) :([
                                 <Link to='/sign-in' key = 'signIn' className="flex-sm-fill text-sm-center nav-link mt-2">Sign In</Link>,
@@ -133,15 +182,26 @@ const App = () => {
                 </nav>
             </header>
             <Switch>
-                <Route exact path="/"> <Home/> </Route>
+                <Route exact path="/"> <Home
+                    talentCount = {talentCount}
+                    jobCount = {jobCount}
+                    employersCount = {employersCount}
+                /> </Route>
                 <Route path = "/about-us"> <AboutUs/> </Route>
                 <Route path = "/jobs"> <Jobs
                     allJobs = {allJobs}
                     page = {page}
                     setPage = {setPage}
+                    setQuery = {setQuery}
                     pageCount = {pageCount}
+                    getAllJobs = {getAllJobs}
                 /> </Route>
-                <Route path = "/talents"> <Talents/> </Route>
+                <Route path = "/talents"> <Talents
+                    allTalents = {allTalents}
+                    getTalents = {getTalents}
+                    setQuery = {setQuery}
+                    talentPageCount = {talentPageCount}
+                /> </Route>
                 <Route path = "/sign-in"> <SignIn getUser={getUser}/> </Route>
                 <Route path = "/sign-up"> <SignUp getUser={getUser}/> </Route>
                 {user && (
@@ -161,6 +221,7 @@ const App = () => {
                                 <EmployeeSetting
                                     user = {user}
                                     getUser = {getUser}
+                                    logout = {logout}
                                 />
                             )}
                         </Route>

@@ -72,6 +72,9 @@ const SignIn = ({ getUser }) => {
                                     required
                                     onChange={(e) => setUser({...user, password: e.target.value})}
                                     onKeyUp={(e) => {if (e.keyCode === 13) check()}}/>
+                                <span className="input-group-text">
+                                    <i className="fa-eye fa-eye-slash"></i>
+                                </span>
                             </div>
                             {errors.password &&(
                                 <div style ={{color: 'red', fontSize: 14 + 'px'}} className = 'mb-2'>

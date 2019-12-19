@@ -58,15 +58,14 @@ const EditJob = () => {
         const data = new FormData()
         data.append('logo', e.target.files[0]) 
         axios
-            .put(`http://localhost:3020/v1/jobs/${jobId}/logo`, {
+            .put(`http://localhost:3020/v1/jobs/${job.id}/logo`, data, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
-                },
-                data: {
-                    data
                 }
+                
             })
             .then((resp) => {
+                console.log(resp, 'resp')
                 return getJobs()
             }) 
             .catch(console.log)

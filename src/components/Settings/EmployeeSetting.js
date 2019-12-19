@@ -1,50 +1,38 @@
 import React, {useState, useEffect} from 'react'
+import { useHistory,  useParams } from 'react-router-dom'
 import axios from 'axios'
 import ChangePassword from './ChangePasswords'
 
-const EmployeeSetting = ({ user, getUser }) => {
-
+const EmployeeSetting = ({ user, getUser, logout }) => {
+    
+    const history = useHistory()
     const [changePassword, setChangePassword] = useState(false)
-
     const [changeUser, setChangeUser] = useState(user)
+
+    console.log(user, 'user')
+
     const [location, setLocation] = useState(user.location)
+    const [skills, setSkills] = useState(user.info.skills)
     const [education, setEducation] = useState(user.info.educations)
     const [bio, setBio] = useState(user.info.bio)
 
-    const [skills, setSkills] = useState(user.skills)
-
-
     const check = () => {
+
+        const skillsCopy = skills.map(skill => {
+            return skill.name
+        })
+
         axios
             .put('http://localhost:3020/v1/users',{
                 ...changeUser,
-                info: { location, education, bio }
+                info: { location, skills: skillsCopy, education, bio }
             }, {
                 headers: {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             })
             .then(() => {
-
-                // let gender = document.getElementsByName("gender");
-                // gender.forEach(data => {
-                //     if(user.gender === data.value.toLowerCase()){
-                //         data.setAttribute('checked', true)
-                //         return getUser()
-                //     }
-                // })
-                // return getUser(), data.removeAttribute('checked', 'checked')
-
-
-                // let gender = document.getElementsByName("gender");
-                // gender.forEach(data => {
-                //     if(user.gender == data.value.toLowerCase()){               
-                        
-                //         return getUser(), data.setAttribute('checked', 'checked')
-                //     }
-                    
-                    // return getUser(), data.removeAttribute('checked', 'checked')
-                // })
+                // history.push('/')
                 return getUser()
             })
             .catch(console.log)
@@ -56,7 +44,8 @@ const EmployeeSetting = ({ user, getUser }) => {
         axios
             .put('http://localhost:3020/v1/users/avatar', data, {
                 headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/octet-stream'
                 }
             })
             .then(() => getUser())
@@ -74,12 +63,28 @@ const EmployeeSetting = ({ user, getUser }) => {
             .catch(console.log)
     }
 
-    // const updateSkills = (e, i) => {
-    //     console.log('updateskill')
-    //     const newSkill = [...skills]
-    //     newSkill[i] = e.target.value
-    //     setSkills(newSkill)
-    // } 
+    const updateSkills = (e, i) => {
+        const newSkills = [...skills]
+        newSkills[i] = {name: e.target.value}
+        setSkills(newSkills)
+    }
+
+    const addSkills = () => {
+        const newSkills = [...skills, ...[{name: ''}]]
+        setSkills(newSkills)
+    }
+
+    const updateEducation = (e, i) => {
+        const newEducation = [...education]
+        newEducation[i] = {value: e.target.value}
+        setEducation(newEducation)
+    }
+
+    const addEducations = () => {
+        const newEducation = [...education, ...[{name: '', date: '', degree: ''}]]
+        console.log(newEducation, 'newedu')
+        setEducation(newEducation)
+    }
 
     let gender = document.getElementsByName("gender");
     gender.forEach(data => {
@@ -87,8 +92,17 @@ const EmployeeSetting = ({ user, getUser }) => {
             data.setAttribute('checked', true)
         }
     })
+    // const [ userInfo, setUserInfo] = useState(null)
 
-    
+    // useEffect(() => {
+    //     // setSkills(user.info.skills)
+    //     // setBio(user.info.bio)
+    //     setSkills(setUserInfo(skills))
+    //     setLocation(user.location)
+    //     // setEducation(setUserInfo(educations))
+    //     setBio(setUserInfo(bio))
+
+    // }, [userInfo])
 
     return (
         <div className = "setting_div">
@@ -121,6 +135,8 @@ const EmployeeSetting = ({ user, getUser }) => {
                         </>
                 )}
             </div>
+            {/* {changeUser && location && ( */}
+
         <div className = "col-md-10">
             <div>
                 <label className="form-group d-flex mt-4">
@@ -183,38 +199,40 @@ const EmployeeSetting = ({ user, getUser }) => {
                         onChange={(e) => setChangeUser({...changeUser, dob: e.target.value})} />
                 </label>
             </div>
-            <div >
-                <label  className="form-group d-flex row">
-                    <strong className="col-md-4">Location</strong>
-                    <div className="col-md-8 p-1 d-flex ">
-                        <input 
-                            type="text" 
-                            placeholder="Country" 
-                            value =  {location.country }
-                            className="form-control"
-                            onChange={(e) => setLocation({...location, country: e.target.value})}/>
-                        <input 
-                            type="text" 
-                            placeholder="State" 
-                            value = {location.state}
-                            className="form-control"
-                            onChange={(e) => setLocation({...location, state: e.target.value})}/>
-                        <input 
-                            type="text" 
-                            placeholder="City" 
-                            value = {location.city}
-                            className="form-control"
-                            onChange={(e) => setLocation({...location, city: e.target.value})}/>
-                        <input 
-                            type="text" 
-                            placeholder="Zip Code"
-                            value = {location.zipCode} 
-                            className="form-control"
-                            onChange={(e) => setLocation({...location, zipCode: e.target.value})}/>
-                    </div>
-                </label>
-            </div> 
-            <div>
+            {/* {location && ( */}
+                <div >
+                    <label  className="form-group d-flex row">
+                        <strong className="col-md-4">Location</strong>
+                        <div className="col-md-8 p-1 d-flex ">
+                            <input 
+                                type="text" 
+                                placeholder="Country" 
+                                value =  {location.country || ''}
+                                className="form-control"
+                                onChange={(e) => setLocation({...location, country: e.target.value})}/>
+                            <input 
+                                type="text" 
+                                placeholder="State" 
+                                value = {location.state || ''}
+                                className="form-control"
+                                onChange={(e) => setLocation({...location, state: e.target.value})}/>
+                            <input 
+                                type="text" 
+                                placeholder="City" 
+                                value = {location.city || ''}
+                                className="form-control"
+                                onChange={(e) => setLocation({...location, city: e.target.value})}/>
+                            <input 
+                                type="text" 
+                                placeholder="Zip Code"
+                                value = {location.zipCode || ''} 
+                                className="form-control"
+                                onChange={(e) => setLocation({...location, zipCode: e.target.value})}/>
+                        </div>
+                    </label>
+                </div> 
+            {/* )} */}
+            {/* <div>
                 <label className="form-group d-flex">
                     <strong className="col-md-4">Phone number</strong>
                     <input 
@@ -226,116 +244,96 @@ const EmployeeSetting = ({ user, getUser }) => {
                         className="form-control" 
                         onChange={(e) => setChangeUser({...changeUser, phone: e.target.value})}/>
                 </label>
-            </div>
-            <div>
-                <label className="form-group d-flex">
-                    <strong className="col-md-4">Biography</strong>
-                    <input 
-                        type="text" 
-                        className="form-control"
-                        // value = {bio}
-                        placeholder = 'Biography'
-                        onChange={(e) => setBio(...bio, e.target.value)}/>
-                </label>
-            </div>
-            <div >
-                <label  className="form-group d-flex row" id = 'div_edu'>
-                    <strong className="col-md-4">Education</strong>
-                    <div className="col-md-8 p-1 d-flex " id= "edu">
+            </div> */}
+            {bio && (
+                <div>
+                    <label className="form-group d-flex">
+                        <strong className="col-md-4">Biography</strong>
                         <input 
                             type="text" 
-                            placeholder="Name" 
-                            value = {education.name}
+                            value={bio}
+                            id = 'bio'
                             className="form-control"
-                            onChange={(e) => setEducation({...education, name: e.target.value})}/>
-                        <input 
-                            type="text" 
-                            value = {education.degree}
-                            placeholder="Degree" 
-                            className="form-control"
-                            onChange={(e) => setEducation({...education, degree: e.target.value})}/>
-                        <input 
-                            type="text" 
-                            value = {education.date}
-                            placeholder="Date" 
-                            className="form-control"
-                            onChange={(e) => setEducation({...education, date: e.target.value})}/>
-                    </div>
+                            placeholder = 'Biography'
+                            onChange={(e) => setBio(e.target.value)}/>
+                    </label>
+                </div>
+            )}
+            {education && (
 
-
-                    {/* { && benefits.map((item, i) => (
-                            <div key={`benefits-${i}`}>
-                                <input 
-                                    value={item.value}
-                                    type="text" 
-                                    className="form-control"
-                                    onChange={e => updateBenefits(e, i)}/>
+                <div >
+                    <label  className="form-group d-flex row">
+                        <strong className="col-md-4">Education</strong>
+                        {education.map((item, i) => {
+                            <div key = {`education-${i}`}>
+                                <div className="col-md-8 p-1 d-flex ">
+                                    <input 
+                                        type="text" 
+                                        placeholder="Name" 
+                                        // value =  {item[i].name }
+                                        className="form-control"
+                                        onChange = {(e) => updateEducation(e, i)}/>
+                                        {/* // onChange={(e) => setEducation({...education, name: e.target.value})}/> */}
+                                    <input 
+                                        type="text" 
+                                        placeholder="Date" 
+                                        // value = {item[i].date}
+                                        className="form-control"
+                                        onChange = {(e) => updateEducation(e, i)}/>
+                                        {/* onChange={(e) => setEducation({...education, date: e.target.value})}/> */}
+                                    <input 
+                                        type="text" 
+                                        placeholder="Degree" 
+                                        // value = {item[i].degree}
+                                        className="form-control"
+                                        onChange = {(e) => updateEducation(e, i)}/>
+                                        {/* onChange={(e) => setEducation({...education, degree: e.target.value})}/> */}
+                                </div>
                                 <button 
                                     className='btn btn-danger'
-                                    onClick={() => setBenefit(benefits.filter(( index) => i !== index))}>
+                                    onClick={() => setEducation(education.filter(( index) => i !== index))}>
                                         -
                                 </button>
-                            </div> 
-                        ))} */}
+
+                            </div>
+                        })}
                         <button 
                             className="btn btn-default" 
-                            onClick={() => {
-                                let elmnt = document.getElementById("edu");
-                                let div_elmnt = document.getElementById("div_edu");
-                                let cln = elmnt.cloneNode(true);
-                                div_elmnt.appendChild(cln);
-                            }}>
+                            onClick={() => addEducations()}>
                                 +
                         </button>
+                    </label>
+                </div>
+            )}
+            {skills && (
 
-
-
-
-
-
-                </label>
-            </div>
             <div>
                 <label className="form-group d-flex">
                     <strong className="col-md-4">Skills</strong>
-                    {/* <input 
-                        type="text" 
-                        className="form-control"
-                        onChange={(e) => setChangeUser({...changeUser, skill: e.target.value})}/> */}
-                    
-                        {console.log('start')}
-                        
-                        {skills && skills.map((item, i) => (
-                            console.log('name', item, i)
-                            // <div key={`skills-${i}`}>
-                            //     {console.log('one step')}
-                            //     <input 
-                            //         type="text" 
-                            //         value={item.name}
-                            //         className="form-control"
-                            //         onChange={e => updateSkills(e, i)}/>
-                            //     {/* <input 
-                            //         value={item.value}
-                            //         type="text" 
-                            //         className="form-control"
-                            //         onChange={e => updateBenefits(e, i)}/> */}
-                            //     <button 
-                            //         className='btn btn-danger'
-                            //         onClick={() => setSkills(skills.filter(( index) => i !== index))}>
-                            //             -
-                            //     </button>
-                            // </div> 
-                        ))}
-                        {/* <button 
-                            className="btn btn-default" 
-                            onClick={() => setSkills([...skills, ''])}>
-                                +
-                        </button> */}
-
-
+                    {skills.map((item, i) => (
+                        <div key={`skills-${i}`}>
+                            <input 
+                                type="text" 
+                                value={item.name}
+                                id = 'skills'
+                                className="form-control"
+                                onChange={(e) => updateSkills(e, i)}/>
+                            <button 
+                                className='btn btn-danger'
+                                onClick={() => setSkills(skills.filter((elem,  index) => i !== index))}>
+                                    -
+                            </button>
+                        </div>
+                    ))}
+                    <button 
+                        className="btn btn-default" 
+                        onClick={() => addSkills()}>
+                            +
+                    </button>
                 </label>
             </div>
-            <div id='div_lang' className = "d-flex row">
+            )}
+            {/* <div id='div_lang' className = "d-flex row">
                 <label  className="form-group ">
                     <strong className="col-md-4">Languages</strong>
                     <div className="col-md-8 p-1 d-flex " id='lang'>
@@ -357,7 +355,7 @@ const EmployeeSetting = ({ user, getUser }) => {
                     }}>
                         +
                 </button>
-            </div>
+            </div> */}
             <div>
                 <label className="form-group d-flex mt-4">
                     <strong className="col-md-4" onClick = {() => setChangePassword(true)}>Change Password</strong>
@@ -373,16 +371,19 @@ const EmployeeSetting = ({ user, getUser }) => {
                 <button 
                     type="button" 
                     className="btn btn-danger ml-2" 
-                    onClick = {()=>{showEmployee(true)}}>
+                    onClick = {()=> history.push('/')}>
                         Cancel
                 </button>
             </div>
         </div>
+            {/* )} */}
         </div>
             )}
     {changePassword && (
         <ChangePassword
-            // changePassword = {changePassword}
+            user = {user}
+            setChangePassword = {setChangePassword}
+            logout = {logout}
         />
     )}
     </div>
@@ -400,3 +401,31 @@ export default EmployeeSetting
 //     data: {
 //         data
 //     }
+
+
+  {/* { && benefits.map((item, i) => (
+                            <div key={`benefits-${i}`}>
+                                <input 
+                                    value={item.value}
+                                    type="text" 
+                                    className="form-control"
+                                    onChange={e => updateBenefits(e, i)}/>
+                                <button 
+                                    className='btn btn-danger'
+                                    onClick={() => setBenefit(benefits.filter(( index) => i !== index))}>
+                                        -
+                                </button>
+                            </div> 
+                        ))} */}
+                        {/* <button 
+                            className="btn btn-default" 
+                            onClick={() => {
+                                let elmnt = document.getElementById("edu");
+                                let div_elmnt = document.getElementById("div_edu");
+                                let cln = elmnt.cloneNode(true);
+                                div_elmnt.appendChild(cln);
+                            }}>
+                                +
+                        </button> */}
+                {/* </label>
+            </div> */}
