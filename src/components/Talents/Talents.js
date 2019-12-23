@@ -1,6 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
 import './Talent.scss'
 
 const Talents = ({allTalents, talentPageCount, getTalents, setQuery}) => {
@@ -30,12 +29,12 @@ const Talents = ({allTalents, talentPageCount, getTalents, setQuery}) => {
     }, [page])
 
     const pageLimit = 5
-
     const pageNumbers = [];
+    const staticPageNumbers = [1, 2, 3, 4, 5]
+    
     for (let i = 1; i <= talentPageCount; i++) {
         pageNumbers.push(i);
     }
-    const staticPageNumbers = [1, 2, 3, 4, 5]
 
     return (
         <div className = "perjob_body">

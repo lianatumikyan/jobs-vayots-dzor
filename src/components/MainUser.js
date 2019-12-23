@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const Jobs = ({ allJobs,  setPage, page, pageCount, getAllJobs, setQuery}) => {
+const MainUser = ({ allJobs,  setPage, page, pageCount, getAllJobs, setQuery}) => {
 
     const pageLimit = 5
     const pageNumbers = [];
@@ -11,27 +11,10 @@ const Jobs = ({ allJobs,  setPage, page, pageCount, getAllJobs, setQuery}) => {
         pageNumbers.push(i);
     }
 
+    
     return (
         <div>
-            <div className = "background" style={{height: 800+'px'}}>
-                <div className="d-flex">
-                    <div className="col-md-3">
-                        <div className = "div_item mt-2 ml-4">
-                            <p className = "font_size">Find your dream job now !</p>
-                        </div>
-                        <div className="d-flex ml-4">
-                            <div className="row md-form col-md-11 d-flex">
-                                <input className="form-control" type="search" placeholder="Search"
-                                    onChange = {(e) => setQuery(e.target.value)}
-                                    onKeyUp={(e) => {if (e.keyCode === 13) getAllJobs()}}
-                                />
-                            </div>
-                            <button className="btn btn-info form-control" onClick = {getAllJobs}>
-                                <i className="fa fa-search fa-fw"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div className = "col md-8">
+            <div className = "col md-8">
                         <div className="col-md-5 mt-2 ml-0">
                             <p className = "font_size div_item">All Jobs</p>
                         </div>
@@ -121,10 +104,8 @@ const Jobs = ({ allJobs,  setPage, page, pageCount, getAllJobs, setQuery}) => {
                     )}
                     </div>
                 </div>
-                    
-                </div>
-            </div>
-            </div>
+        </div>
     )
 }
-export default Jobs
+
+export default MainUser

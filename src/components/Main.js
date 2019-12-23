@@ -1,87 +1,77 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom'
-import ChangePassword from './ChangePasswords';
 import axios from 'axios'
-import './EmployerSetting.scss'
+// import './EmployerSetting.scss'
 
-const EmployerSetting = ({ allJobs, setPage, page, pageCount, user, logout, getAllJobs, setAllJobs }) => {
+const Main = ({allJobs, setPage, page, pageCount, getAllJobs, setAllJobs })=> {
+    const getArchive = (jobId) => {
 
-    const [changePassword, setChangePassword] = useState(false)
+        axios
+            .put(`http://localhost:3020/v1/jobs/${jobId}/archive`, null, {
+                 headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                 }
+            })
+            .then((responce) => {
+                console.log('its okay', responce)
+                return getAllJobs()
+            })
+            .catch((err)=>{
+                // console.log({'Authorization': `Bearer ${localStorage.getItem('token')}`})
+                console.log('kj', err)
+            })
 
-    // const getArchive = (jobId) => {
+    }
 
-    //     axios
-    //         .put(`http://localhost:3020/v1/jobs/${jobId}/archive`, null, {
-    //              headers: {
-    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //              }
-    //         })
-    //         .then((responce) => {
-    //             console.log('its okay', responce)
-    //             return getAllJobs()
-    //         })
-    //         .catch((err)=>{
-    //             // console.log({'Authorization': `Bearer ${localStorage.getItem('token')}`})
-    //             console.log('kj', err)
-    //         })
+    const deleteJob = (jobId) => {
+        console.log(allJobs)
 
-    // }
+        axios
+            .delete(`http://localhost:3020/v1/jobs/${jobId}`, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then((resp) => {
+                console.log('resp', resp)
+                // const filteredJobs = allJobs.filter(job => job.id !== jobId)  
+                // setAllJobs(filteredJobs) 
+                return getAllJobs()
+                // return getJobs()
+            })
+            .catch(console.log)
+    }
 
-    // const deleteJob = (jobId) => {
-    //     console.log(allJobs)
+    const unArchive = (jobId) => {
 
-    //     axios
-    //         .delete(`http://localhost:3020/v1/jobs/${jobId}`, {
-    //             headers: {
-    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //             }
-    //         })
-    //         .then((resp) => {
-    //             console.log('resp', resp)
-    //             // const filteredJobs = allJobs.filter(job => job.id !== jobId)  
-    //             // setAllJobs(filteredJobs) 
-    //             return getAllJobs()
-    //             // return getJobs()
-    //         })
-    //         .catch(console.log)
-    // }
+        axios
+            .put(`http://localhost:3020/v1/jobs/${jobId}/unarchive`, null, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then(() => {
+                return getAllJobs()
+            })
+            .catch(console.log)
+    }
 
-    // const unArchive = (jobId) => {
+    const pageLimit = 5
+    const pageNumbers = [];
+    const staticPageNumbers = [1, 2, 3, 4, 5]
 
-    //     axios
-    //         .put(`http://localhost:3020/v1/jobs/${jobId}/unarchive`, null, {
-    //             headers: {
-    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //             }
-    //         })
-    //         .then(() => {
-    //             return getAllJobs()
-    //         })
-    //         .catch(console.log)
-    // }
+    for (let i = 1; i <= pageCount; i++) {
+        pageNumbers.push(i);
+    }
 
-    // const pageLimit = 5
-    // const pageNumbers = [];
-    // const staticPageNumbers = [1, 2, 3, 4, 5]
-
-    // for (let i = 1; i <= pageCount; i++) {
-    //     pageNumbers.push(i);
-    // }
-
-    // useEffect(()=>{
-    //     getAllJobs()
-    //     // getArchive()
-    // }, [])
+    useEffect(()=>{
+        getAllJobs()
+        // getArchive()
+    }, [])
 
     return (
 
-        <div className = "position-relative ">
-            <div className="col-md-9 d-flex justify-content-end">
-                            <label className="form-group d-flex mt-4">
-                                <strong className="row_password" style={{cursor: 'pointer'}} onClick = {() => setChangePassword(true)}>Change Password</strong>
-                            </label>
-                        </div>
-            {/* {<div  className = "setting">
+    <div  className = "setting">
                     <div className = "col-md-10 d-flex mb-5">
                         <div className="d-flex job col-md-3 justify-content-start">
                             <p className = "createJob"><strong>Create New Job !</strong></p>
@@ -93,11 +83,11 @@ const EmployerSetting = ({ allJobs, setPage, page, pageCount, user, logout, getA
                                 </button>
                             </Link>
                         </div>
-                        <div className="col-md-9 d-flex justify-content-end">
+                        {/* <div className="col-md-9 d-flex justify-content-end">
                             <label className="form-group d-flex mt-4">
                                 <strong className="row_password" style={{cursor: 'pointer'}} onClick = {() => setChangePassword(true)}>Change Password</strong>
                             </label>
-                        </div>
+                        </div> */}
                     </div>
                     <div className = "col-md-11">
                         {allJobs.map((note, i) =>{
@@ -214,17 +204,8 @@ const EmployerSetting = ({ allJobs, setPage, page, pageCount, user, logout, getA
                         )}
                     </div>
                 </div>
-            } */}
-            {changePassword && (
-                <ChangePassword
-                    user = {user}
-                    setChangePassword = {setChangePassword}
-                    logout = {logout}
-                />
-            )}
-        </div>
-       
     )
+
 }
 
-export default EmployerSetting
+export default Main

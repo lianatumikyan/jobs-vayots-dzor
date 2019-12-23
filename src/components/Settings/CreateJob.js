@@ -60,7 +60,7 @@ const CreateJob = () => {
                 if(crateOnejob.deadline <= date){
                     throw new Error('dedaline must be a longer')
                 }
-                // history.push('/settings')
+                history.push('/settings')
             })
             .catch((err)=>{
                 console.log(err)
@@ -125,7 +125,7 @@ const CreateJob = () => {
                         className="img-responsive"
                         src='https://www.trzcacak.rs/myfile/detail/385-3856300_no-avatar-png.png'/>
                 </div>
-            <div className="col-md-8">
+            <div className="col-md-9">
                 <div>
                     <label className="form-group d-flex mt-4">
                         <strong className="col-md-4">Title</strong>
@@ -146,9 +146,9 @@ const CreateJob = () => {
                 </div>
                 <div>
                     <label className="form-group d-flex mt-4">
-                        <strong className="col-md-4">Vacancy (number) </strong>
+                        <strong className="col-md-4">Vacancy (   Qty) </strong>
                         <input 
-                            type="text" 
+                            type="number" 
                             className="form-control"
                             onChange={(e) => setcreateJob({...crateOnejob, vacancy: e.target.value})}/>
                     </label>
@@ -162,12 +162,11 @@ const CreateJob = () => {
                             onChange={(e) => setcreateJob({...crateOnejob, salary: e.target.value})}/>
                     </label>
                 </div>
-                <div className="col-md-6 ">
-                    <div className="form-group" id = 'gender'>
-                        <label className="col-sm-2">
+                    <div className="form-group mb-4" id = 'gender'>
+                        <label className="col-md-4">
                             <strong>Work for </strong>
                         </label>
-                        <label >
+                        <label className="mr-3">
                             <input 
                                 type="radio" 
                                 name="gender" 
@@ -175,7 +174,7 @@ const CreateJob = () => {
                                 onChange={(e) => setcreateJob({...crateOnejob, gender: e.target.value})}/>
                                 Male
                         </label>
-                        <label >
+                        <label className="mr-3">
                             <input 
                                 type="radio" 
                                 name="gender" 
@@ -183,22 +182,20 @@ const CreateJob = () => {
                                 onChange={(e) => setcreateJob({...crateOnejob, gender: e.target.value})}/>
                                 Female
                         </label>
-                        <label >
+                        <label className="mr-3">
                             <input 
                                 type="radio" 
-                                name="gender" 
-                                value="any" 
+                                name="gender"
+                                value="Any" 
                                 onChange={(e) => setcreateJob({...crateOnejob, gender: e.target.value})}/>
                                 Any
                         </label>
-                    </div>
                 </div>
-                <div className="col-md-6 ">
-                    <div className="form-group" id = 'type'>
-                        <label className="col-sm-2">
+                    <div className="form-group mb-4" id = 'type'>
+                        <label className="col-md-4">
                             <strong>Type of work</strong>
                         </label>
-                        <label >
+                        <label className="mr-3">
                             <input 
                                 type="radio" 
                                 name="type" 
@@ -206,7 +203,7 @@ const CreateJob = () => {
                                 onChange={(e) => setcreateJob({...crateOnejob, type: e.target.value})}/>
                                 Part Time
                         </label>
-                        <label >
+                        <label className="mr-3">
                             <input 
                                 type="radio" 
                                 name="type" 
@@ -214,7 +211,6 @@ const CreateJob = () => {
                                 onChange={(e) => setcreateJob({...crateOnejob, type: e.target.value})}/>
                                 Full Time
                         </label>
-                    </div>
                 </div>
                 <div>
                     <label className="form-group d-flex">
@@ -222,7 +218,6 @@ const CreateJob = () => {
                         <input 
                             className="form-control" 
                             type = "date" 
-                            // value = {changejob.dob || ''}
                             onChange={(e) => setcreateJob({...crateOnejob, deadline: e.target.value})} />
                         {errors.deadline &&(
                             <span className = "position-absolute" style = {{right: 0}}>
@@ -239,9 +234,9 @@ const CreateJob = () => {
                     </label>
                 </div>
                 <div >
-                <label  className="form-group d-flex row">
+                <label  className="form-group d-flex ">
                     <strong className="col-md-4">Location</strong>
-                    <div className="col-md-8 p-1 d-flex ">
+                    <div className="col-md-8 p-0 d-flex ">
                         <input 
                             type="text" 
                             placeholder="Country" 
@@ -293,15 +288,6 @@ const CreateJob = () => {
                         </div>
                     )}
                 </label>
-{/* 
-                <label className="form-group d-flex mt-4">
-                    <strong className="col-md-4">Benefits</strong>
-                    <input 
-                        type="text" 
-                        // value={job.salary}
-                        className="form-control"
-                        onChange={(e) => setBenefit(...benefits, [e.target.value])}/>
-                </label> */}
             </div>
             <div>
                 <label className="form-group d-flex mt-4">
@@ -325,12 +311,6 @@ const CreateJob = () => {
                         onClick={() => addEducations()}>
                             +
                     </button>
-                    {/* <strong className="col-md-4">Education</strong>
-                    <input 
-                        type="text" 
-                        value={job.salary}
-                        className="form-control"
-                        onChange={(e) => setEducation(...educations, [e.target.value])}/> */}
                 </label>
             </div>
             <div>
@@ -355,11 +335,6 @@ const CreateJob = () => {
                         onClick={() => addResponsibilities()}>
                             +
                     </button>
-                    {/* <input 
-                        type="text" 
-                        // value={job.salary}
-                        className="form-control"
-                        onChange={(e) => setResponsibilities(...responsibilities, [e.target.value])}/> */}
                 </label>
             </div>
             <div className="d-flex justify-content-end mt-4">

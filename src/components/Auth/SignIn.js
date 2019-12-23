@@ -23,7 +23,7 @@ const SignIn = ({ getUser }) => {
                 localStorage.setItem('token', item.data.token.access)
                 localStorage.setItem('id', item.data.user.id)
                 getUser()
-                history.push('/')
+                history.push('/feed')
             })
             .catch(()=>{
                 return  setErrors({...errors, email: true, password: false}) || setErrors({...errors, email: false, password: true})

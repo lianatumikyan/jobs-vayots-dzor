@@ -15,6 +15,8 @@ import CreateJob from './Settings/CreateJob'
 import OneJob from './Jobs/OneJob'
 import OneTalent from './Talents/OneTalent'
 import {useTranslation} from "react-i18next";
+import Main from './Main';
+import MainUser from './MainUser'
 
 const withRouter = Component => (props) => {
     return (
@@ -61,6 +63,7 @@ const App = () => {
     const [talentCount, setTalentCount] = useState(null)
     const [employersCount, setEmployersCount] = useState(null)
     const [query, setQuery] = useState('')
+    // const [filter, setFilter] = useState('')
 
     const getAllJobs = () => {
         const limit = 4;
@@ -76,8 +79,7 @@ const App = () => {
                 }
             })
             .then(response => {
-                console.log(q, 'q')
-                console.log(response, 'jobs')
+                console.log(response.data.jobs[0], 'jobs')
                 setAllJobs(response.data.jobs)
                 setPageCount(response.data._meta.pageCount)
                 setJobCount(response.data._meta.total)
@@ -145,9 +147,15 @@ const App = () => {
                 <nav className = "nav navbar d-flex" id='header'>
                     <div>
                         <nav className="nav container d-flex">
-                            <Link to='/'>
-                                <img src = "./logo.jpg"/>
-                            </Link>
+                            {user ? (
+                                <Link to='/feed'>
+                                    <img src = "./logo.jpg"/>
+                                </Link>
+                            ): (
+                                <Link to='/'>
+                                    <img src = "./logo.jpg"/>
+                                </Link>
+                            )}
                             <Link to='/about-us'className="flex-sm-fill text-sm-center nav-link mt-2" >{t('app.about_us')}</Link>
                             <Link to='/jobs' className="flex-sm-fill text-sm-center nav-link mt-2">{t('app.jobs')}</Link>
                             <Link to='/talents'className="flex-sm-fill text-sm-center nav-link mt-2">{t('app.talents')}</Link>
@@ -182,11 +190,38 @@ const App = () => {
                 </nav>
             </header>
             <Switch>
-                <Route exact path="/"> <Home
-                    talentCount = {talentCount}
-                    jobCount = {jobCount}
-                    employersCount = {employersCount}
-                /> </Route>
+                {user ? (
+                    <Route exact path = "/feed">
+                        {user.accountType === 'employers' ? (
+                            <Main
+                                setAllJobs = {setAllJobs}
+                                allJobs = {allJobs} 
+                                getAllJobs = {getAllJobs}
+                                setPage =  {setPage}
+                                page = {page}
+                                pageCount = {pageCount}
+                                user = {user}
+                                logout = {logout}/>
+                        ): (
+                            <MainUser
+                                allJobs = {allJobs}
+                                page = {page}
+                                setPage = {setPage}
+                                setQuery = {setQuery}
+                                pageCount = {pageCount}
+                                getAllJobs = {getAllJobs}
+                            />
+                        )
+                       
+                    }
+                    </Route>
+                ) : (
+                    <Route exact path="/"> <Home
+                        talentCount = {talentCount}
+                        jobCount = {jobCount}
+                        employersCount = {employersCount}
+                    /> </Route>
+                )}
                 <Route path = "/about-us"> <AboutUs/> </Route>
                 <Route path = "/jobs"> <Jobs
                     allJobs = {allJobs}
@@ -209,6 +244,7 @@ const App = () => {
                         <Route path = "/settings">
                             {user.accountType === 'employers' ? (
                                 <EmployerSetting
+                                    setAllJobs = {setAllJobs}
                                     allJobs = {allJobs} 
                                     getAllJobs = {getAllJobs}
                                     setPage =  {setPage}
@@ -240,6 +276,7 @@ const App = () => {
                 <Route path="/talents:talentId">
                     <OneTalent/>
                 </Route>
+                
             </Switch>
             {<footer className = "w-100">
                 <p> 
