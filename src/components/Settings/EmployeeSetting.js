@@ -11,10 +11,10 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
 
     console.log(user, 'user')
 
-    const [location, setLocation] = useState(user.location)
-    const [skills, setSkills] = useState(user.info.skills)
-    const [education, setEducation] = useState(user.info.educations)
-    const [bio, setBio] = useState(user.info.bio)
+    const [location, setLocation] = useState(null)
+    const [skills, setSkills] = useState(null)
+    const [education, setEducation] = useState(null)
+    const [bio, setBio] = useState(null)
 
     const check = () => {
 
@@ -82,7 +82,6 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
 
     const addEducations = () => {
         const newEducation = [...education, ...[{name: '', date: '', degree: ''}]]
-        console.log(newEducation, 'newedu')
         setEducation(newEducation)
     }
 
@@ -92,17 +91,15 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
             data.setAttribute('checked', true)
         }
     })
-    // const [ userInfo, setUserInfo] = useState(null)
 
-    // useEffect(() => {
-    //     // setSkills(user.info.skills)
-    //     // setBio(user.info.bio)
-    //     setSkills(setUserInfo(skills))
-    //     setLocation(user.location)
-    //     // setEducation(setUserInfo(educations))
-    //     setBio(setUserInfo(bio))
-
-    // }, [userInfo])
+    useEffect(() => {
+        if(user.info !== null){
+            setSkills(user.info.skills)
+            setBio(user.info.bio)
+            setEducation(user.info.educations)
+        }
+        setLocation(user.location)
+    }, [user.info, user])
 
     return (
         <div className = "setting_div">
@@ -135,35 +132,32 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                         </>
                 )}
             </div>
-            {/* {changeUser && location && ( */}
-
-        <div className = "col-md-10">
-            <div>
-                <label className="form-group d-flex mt-4">
-                    <strong className="col-md-4">First name</strong>
-                    <input 
-                        type="text" 
-                        value={changeUser.firstName}
-                        className="form-control"
-                        onChange={(e) => setChangeUser({...changeUser, firstName: e.target.value})}/>
-                </label>
-            </div>
-            <div>
-                <label className="form-group d-flex">
-                    <strong className="col-md-4">Last name</strong>
-                    <input 
-                        type="text" 
-                        value = {changeUser.lastName}
-                        className="form-control"
-                        onChange={(e) => setChangeUser({...changeUser, lastName: e.target.value})}/>
-                </label>
-            </div>
-            <div className="col-md-6 ">
-                <div className="form-group" id = 'gender'>
-                    <label className="col-sm-2">
+            <div className = "col-md-10">
+                <div>
+                    <label className="form-group d-flex mt-4">
+                        <strong className="col-md-4">First name</strong>
+                        <input 
+                            type="text" 
+                            value={changeUser.firstName}
+                            className="form-control"
+                            onChange={(e) => setChangeUser({...changeUser, firstName: e.target.value})}/>
+                    </label>
+                </div>
+                <div>
+                    <label className="form-group d-flex">
+                        <strong className="col-md-4">Last name</strong>
+                        <input 
+                            type="text" 
+                            value = {changeUser.lastName}
+                            className="form-control"
+                            onChange={(e) => setChangeUser({...changeUser, lastName: e.target.value})}/>
+                    </label>
+                </div>
+                <div className="form-group mb-3" id = 'gender'>
+                    <label className="col-md-4">
                         <strong>Gender</strong>
                     </label>
-                    <label >
+                    <label className = 'mr-3'>
                         <input 
                             type="radio" 
                             name="gender" 
@@ -171,7 +165,7 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                             onChange={(e) => setChangeUser({...changeUser, gender: e.target.value})}/>
                             Male
                     </label>
-                    <label >
+                    <label className = 'mr-3'>
                         <input 
                             type="radio" 
                             name="gender" 
@@ -188,22 +182,20 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                             Other
                     </label>
                 </div>
-            </div>
-            <div>
-                <label className="form-group d-flex">
-                    <strong className="col-md-4">Date of birth</strong>
-                    <input 
-                        className="form-control" 
-                        type = "date" 
-                        value = {changeUser.dob || ''}
-                        onChange={(e) => setChangeUser({...changeUser, dob: e.target.value})} />
-                </label>
-            </div>
-            {/* {location && ( */}
+                <div>
+                    <label className="form-group d-flex">
+                        <strong className="col-md-4">Date of birth</strong>
+                        <input 
+                            className="form-control" 
+                            type = "date" 
+                            value = {changeUser.dob || ''}
+                            onChange={(e) => setChangeUser({...changeUser, dob: e.target.value})} />
+                    </label>
+                </div>
                 <div >
-                    <label  className="form-group d-flex row">
+                    <label  className="form-group d-flex">
                         <strong className="col-md-4">Location</strong>
-                        <div className="col-md-8 p-1 d-flex ">
+                        <div className="col-md-8 p-0 d-flex ">
                             <input 
                                 type="text" 
                                 placeholder="Country" 
@@ -219,19 +211,18 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                             <input 
                                 type="text" 
                                 placeholder="City" 
-                                value = {location.city || ''}
+                                // value = {location.city || ''}
                                 className="form-control"
                                 onChange={(e) => setLocation({...location, city: e.target.value})}/>
                             <input 
                                 type="text" 
                                 placeholder="Zip Code"
-                                value = {location.zipCode || ''} 
+                                // value = {location.zipCode || ''} 
                                 className="form-control"
                                 onChange={(e) => setLocation({...location, zipCode: e.target.value})}/>
                         </div>
                     </label>
                 </div> 
-            {/* )} */}
             {/* <div>
                 <label className="form-group d-flex">
                     <strong className="col-md-4">Phone number</strong>
@@ -245,7 +236,6 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                         onChange={(e) => setChangeUser({...changeUser, phone: e.target.value})}/>
                 </label>
             </div> */}
-            {bio && (
                 <div>
                     <label className="form-group d-flex">
                         <strong className="col-md-4">Biography</strong>
@@ -258,11 +248,8 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                             onChange={(e) => setBio(e.target.value)}/>
                     </label>
                 </div>
-            )}
-            {education && (
-
                 <div >
-                    <label  className="form-group d-flex row">
+                    <label  className="form-group d-flex">
                         <strong className="col-md-4">Education</strong>
                         {education.map((item, i) => {
                             <div key = {`education-${i}`}>
@@ -304,8 +291,6 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                         </button>
                     </label>
                 </div>
-            )}
-            {skills && (
 
             <div>
                 <label className="form-group d-flex">
@@ -332,7 +317,6 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                     </button>
                 </label>
             </div>
-            )}
             {/* <div id='div_lang' className = "d-flex row">
                 <label  className="form-group ">
                     <strong className="col-md-4">Languages</strong>
@@ -376,9 +360,7 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                 </button>
             </div>
         </div>
-            {/* )} */}
-        </div>
-            )}
+    </div>)}
     {changePassword && (
         <ChangePassword
             user = {user}

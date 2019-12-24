@@ -51,11 +51,12 @@ const Home = ({jobCount, talentCount, employersCount}) => {
                                 </div>
                             </div>
                             <div className="d-flex row" style={{color: 'white'}}>
+                                {console.log(jobCount, talentCount, employersCount, 'count')}
                                 <div className = "col-md-4">
                                     <div className="d-flex align-items-center justify-content-center mb-2">
                                         <strong>
                                             <CountUp
-                                                end = {jobCount}
+                                                end = {jobCount || 0}
                                                 duration = {5}
                                             />
                                         </strong>
@@ -67,7 +68,7 @@ const Home = ({jobCount, talentCount, employersCount}) => {
                                     <div className="d-flex align-items-center justify-content-center mb-2">
                                         <strong className="number" data-number="550">
                                             <CountUp
-                                                end ={talentCount}
+                                                end ={talentCount || 0}
                                                 duration = {5}
                                             />
                                         </strong>
@@ -79,7 +80,7 @@ const Home = ({jobCount, talentCount, employersCount}) => {
                                     <div className="d-flex align-items-center justify-content-center mb-2">
                                         <strong className="number" data-number="550">
                                             <CountUp
-                                                end ={employersCount}
+                                                end ={employersCount || 0}
                                                 duration = {5}
                                             />
                                         </strong>

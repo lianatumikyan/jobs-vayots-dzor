@@ -244,6 +244,7 @@ const App = () => {
                         <Route path = "/settings">
                             {user.accountType === 'employers' ? (
                                 <EmployerSetting
+                                    getUser = {getUser}
                                     setAllJobs = {setAllJobs}
                                     allJobs = {allJobs} 
                                     getAllJobs = {getAllJobs}

@@ -1,220 +1,224 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import ChangePassword from './ChangePasswords';
 import axios from 'axios'
 import './EmployerSetting.scss'
 
-const EmployerSetting = ({ allJobs, setPage, page, pageCount, user, logout, getAllJobs, setAllJobs }) => {
+const EmployerSetting = ({ getUser, user, logout }) => {
 
     const [changePassword, setChangePassword] = useState(false)
+    const [changeUser, setChangeUser] = useState(user)
+    const [location, setLocation] = useState(user.location)
+    const [bio, setBio] = useState(null)
 
-    // const getArchive = (jobId) => {
+    const history = useHistory()
 
-    //     axios
-    //         .put(`http://localhost:3020/v1/jobs/${jobId}/archive`, null, {
-    //              headers: {
-    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //              }
-    //         })
-    //         .then((responce) => {
-    //             console.log('its okay', responce)
-    //             return getAllJobs()
-    //         })
-    //         .catch((err)=>{
-    //             // console.log({'Authorization': `Bearer ${localStorage.getItem('token')}`})
-    //             console.log('kj', err)
-    //         })
+    const check = () => {
 
-    // }
+        axios
+            .put('http://localhost:3020/v1/users',{
+                ...changeUser,
+                info: { location, bio }
+            }, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then(() => {
+                history.push('/feed')
+                return getUser()
+            })
+            .catch(console.log)
+            
+    }
 
-    // const deleteJob = (jobId) => {
-    //     console.log(allJobs)
+    const onImageUpload = (e) => {
+        const data = new FormData()
+        data.append('avatar', e.target.files[0]) 
+        axios
+            .put('http://localhost:3020/v1/users/avatar', data, {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`,
+                    'Content-Type': 'application/octet-stream'
+                }
+            })
+            .then(() => getUser())
+            .catch(console.log)
+    }
 
-    //     axios
-    //         .delete(`http://localhost:3020/v1/jobs/${jobId}`, {
-    //             headers: {
-    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //             }
-    //         })
-    //         .then((resp) => {
-    //             console.log('resp', resp)
-    //             // const filteredJobs = allJobs.filter(job => job.id !== jobId)  
-    //             // setAllJobs(filteredJobs) 
-    //             return getAllJobs()
-    //             // return getJobs()
-    //         })
-    //         .catch(console.log)
-    // }
+    const onImageDelete = () => {
+        axios
+            .delete('http://localhost:3020/v1/users/avatar', {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then(() => getUser())
+            .catch(console.log)
+    }
 
-    // const unArchive = (jobId) => {
+    useEffect(() => {
+        if(user.info !== null){
 
-    //     axios
-    //         .put(`http://localhost:3020/v1/jobs/${jobId}/unarchive`, null, {
-    //             headers: {
-    //                 'Authorization': `Bearer ${localStorage.getItem('token')}`
-    //             }
-    //         })
-    //         .then(() => {
-    //             return getAllJobs()
-    //         })
-    //         .catch(console.log)
-    // }
+            setBio(user.info.bio)
+        }
 
-    // const pageLimit = 5
-    // const pageNumbers = [];
-    // const staticPageNumbers = [1, 2, 3, 4, 5]
-
-    // for (let i = 1; i <= pageCount; i++) {
-    //     pageNumbers.push(i);
-    // }
-
-    // useEffect(()=>{
-    //     getAllJobs()
-    //     // getArchive()
-    // }, [])
+    }, [user.info])
 
     return (
-
-        <div className = "position-relative ">
+        <div className = "position-relative setting_div" style = {{height: 700+'px'}}>
             <div className="col-md-9 d-flex justify-content-end">
-                            <label className="form-group d-flex mt-4">
-                                <strong className="row_password" style={{cursor: 'pointer'}} onClick = {() => setChangePassword(true)}>Change Password</strong>
-                            </label>
-                        </div>
-            {/* {<div  className = "setting">
-                    <div className = "col-md-10 d-flex mb-5">
-                        <div className="d-flex job col-md-3 justify-content-start">
-                            <p className = "createJob"><strong>Create New Job !</strong></p>
-                        </div>
-                        <div className="col-md-1 mt-4">
-                            <Link to = '/create_job' >
-                                <button type="button" className="btn btn-success check" style={{borderRadius: 50+'%'}}>
-                                    <strong >+</strong>
-                                </button>
-                            </Link>
-                        </div>
-                        <div className="col-md-9 d-flex justify-content-end">
-                            <label className="form-group d-flex mt-4">
-                                <strong className="row_password" style={{cursor: 'pointer'}} onClick = {() => setChangePassword(true)}>Change Password</strong>
-                            </label>
-                        </div>
-                    </div>
-                    <div className = "col-md-11">
-                        {allJobs.map((note, i) =>{
-                            return ( 
-                                <div className = "d-flex border-bottom" key={`note-${i}`} >
-                                    <div className="d-flex">
-                                        {note.logo && (
-                                            <img 
-                                                className = "mb-1 mt-3 ml-5 logo_img" 
-                                                src = {note.logo}
-                                                />                         
-                                        )}
-                                        {!note.logo && (
-                                            <img 
-                                                className = "mb-1 mt-3 ml-5" 
-                                                src = "https://jobinformation.info/wp-content/uploads/2019/08/recruitment-3942378_1920.jpg"/>
-                                        )}
-                                    </div>
-                                    <div className="col-md-4 mt-5 ml-2">
-                                        <h6>{note.title}</h6>
-                                        <p>Name</p>
-                                    </div>
-                                    <div className="col-md-4 mt-5">
-                                        <p> Location: {note.location.city}</p>
-                                        <p> Deadline: {note.deadline}</p>
-                                    </div>
-                                    <div className="mt-5 col-md-1">
-                                        <Link to = {`/settings${note.id}`} >
-                                            <button className="btn btn-info mb-1" 
-                                                style={{fontSize: 12+'px', fontWeight: 'bold', width: 90+'px'}}>
-                                                Edit
-                                            </button>
-                                        </Link>
-                                        <button
-                                            className="btn btn-danger"
-                                            style={{fontSize: 12+'px', fontWeight: 'bold', width: 90+'px'}}
-                                            onClick = {()=> {
-                                                return deleteJob(note.id)
-                                            }}> 
-                                            Delete
-                                        </button>
-                                    </div>
-                                    <div className="mt-5 col-md-1">
-                                        {note.isArchived === false ?
-                                            <button
-                                                className="btn btn-warning mb-1"
-                                                style={{fontSize: 12+'px', fontWeight: 'bold', width: 90+'px'}}
-                                                onClick = {()=> getArchive(note.id)}
-                                                > 
-                                                Archive
-                                            </button>
-                                            : 
-
-                                        <button
-                                            className="btn btn-success"
-                                            style={{fontSize: 12+'px', fontWeight: 'bold', width: 90+'px'}}
-                                            onClick = {()=> unArchive(note.id)}
-                                            > 
-                                            UnArchive
-                                        </button>
-
-                                        }
-                                    </div>
-                                </div>
-                            )
-                        })}
-                    </div>
-                    <div className = "pagination d-flex justify-content-center" style={{marginTop: 30+'%'}}>
-                        {page > 1 && (
-                            <button onClick={() => setPage(page - 1)}>
-                                Previous
-                            </button>
-                        )}
-                        {pageCount > 1 && (
-                            <div className = "pagination d-flex justify-content-center">
-                                {pageLimit >= pageCount && (
-                                    pageNumbers.map((number, e) => {
-                                        if(page === number) {
-                                            return (
-                                            <div key = {number} className = 'active d-flex align-items-center' onClick={() => setPage(number)}>
-                                                <p> {number} </p>
-                                            </div>
-                                            ) 
-                                        }
-                                        return (
-                                            <div key = {number} className = 'page_div' onClick={() => setPage(number)}>
-                                                <p id = 'name'> {number} </p>
-                                            </div>
-                                            ) 
-                                    })
-                                )}
-                                {pageLimit< pageCount && (
-                                    staticPageNumbers.map(number => {
-                                        if(page === number) {
-                                            return (
-                                            <div key = {number} className = 'active d-flex align-items-center' onClick={() => setPage(number)}>
-                                                <p> {number} </p>
-                                            </div>
-                                            ) 
-                                        }
-                                        return (
-                                            <div key = {number} className = 'page_div' onClick={() => setPage(number)}>
-                                                <p id = 'name'> {number} </p>
-                                            </div>
-                                        )
-                                    })
-                                )}
-                            </div>
-                        )}
-                        {page < pageCount && (
-                            <button onClick={() => setPage(page + 1)}>
-                                Next
-                            </button>
-                        )}
-                    </div>
+                <label className="form-group d-flex mt-4">
+                    <strong className="row_password" style={{cursor: 'pointer'}} onClick = {() => setChangePassword(true)}>Change Password</strong>
+                </label>
+            </div>
+            <div>
+                <h2>Profile info</h2>
+            </div>
+            <div className="img-wraps">
+                {user.avatar ? (
+                    <>
+                    <img
+                        src={`${user.avatar}`} 
+                        className="img-responsive"/>
+                    <span  
+                        className="closes" 
+                        onClick = {onImageDelete}>
+                            &times;
+                    </span>
+                    </>
+                ) : (
+                    <>
+                    <img 
+                        className="img-responsive"
+                        src={'https://www.trzcacak.rs/myfile/detail/385-3856300_no-avatar-png.png'}/>
+                    <input 
+                        type = "file" 
+                        className="position-absolute "
+                        onChange = {onImageUpload}/>
+                        </>
+                )}
+            </div>
+            <div className = "col-md-10">
+                <div>
+                    <label className="form-group d-flex mt-4">
+                        <strong className="col-md-4">First name</strong>
+                        <input 
+                            type="text" 
+                            value={changeUser.firstName}
+                            className="form-control"
+                            onChange={(e) => setChangeUser({...changeUser, firstName: e.target.value})}
+                            />
+                    </label>
                 </div>
-            } */}
+                <div>
+                    <label className="form-group d-flex">
+                        <strong className="col-md-4">Last name</strong>
+                        <input 
+                            type="text" 
+                            value = {changeUser.lastName}
+                            className="form-control"
+                            onChange={(e) => setChangeUser({...changeUser, lastName: e.target.value})}
+                            />
+                    </label>
+                </div>
+                <div className="from-group mb-3" id = 'gender'>
+                    <label className="col-md-4">
+                        <strong>Gender</strong>
+                    </label>
+                    <label className = 'mr-3'>
+                        <input 
+                            type="radio" 
+                            name="gender" 
+                            value='Male'
+                            onChange={(e) => setChangeUser({...changeUser, gender: e.target.value})}/>
+                            Male
+                    </label>
+                    <label className = 'mr-3'>
+                        <input 
+                            type="radio" 
+                            name="gender" 
+                            value="Female" 
+                            onChange={(e) => setChangeUser({...changeUser, gender: e.target.value})}/>
+                            Female
+                    </label>
+                    <label >
+                        <input 
+                            type="radio" 
+                            name="gender" 
+                            value="Other" 
+                            onChange={(e) => setChangeUser({...changeUser, gender: e.target.value})}/>
+                            Other
+                    </label>
+                </div>
+                <div>
+                    <label className="form-group d-flex">
+                        <strong className="col-md-4">Date of birth</strong>
+                        <input 
+                            className="form-control" 
+                            type = "date" 
+                            value = {changeUser.dob || ''}
+                            onChange={(e) => setChangeUser({...changeUser, dob: e.target.value})} />
+                    </label>
+                </div>
+                <div >
+                    <label  className="form-group d-flex">
+                        <strong className="col-md-4">Location</strong>
+                        <div className="col-md-8 p-0 d-flex ">
+                            <input 
+                                type="text" 
+                                placeholder="Country" 
+                                value =  {location.country || ''}
+                                className="form-control"
+                                onChange={(e) => setLocation({...location, country: e.target.value})}/>
+                            <input 
+                                type="text" 
+                                placeholder="State" 
+                                value = {location.state || ''}
+                                className="form-control"
+                                onChange={(e) => setLocation({...location, state: e.target.value})}/>
+                            <input 
+                                type="text" 
+                                placeholder="City" 
+                                value = {location.city || ''}
+                                className="form-control"
+                                onChange={(e) => setLocation({...location, city: e.target.value})}/>
+                            <input 
+                                type="text" 
+                                placeholder="Zip Code"
+                                value = {location.zipCode || ''} 
+                                className="form-control"
+                                onChange={(e) => setLocation({...location, zipCode: e.target.value})}/>
+                        </div>
+                    </label>
+                </div> 
+                <div>
+                    <label className="form-group d-flex">
+                        <strong className="col-md-4">Biography</strong>
+                        <textarea
+                            value={bio || ''}
+                            className="form-control"
+                            placeholder = 'Biography'
+                            onChange={(e) => setBio(e.target.value)}>
+                        </textarea>
+                    </label>
+                </div>
+                <div className="d-flex justify-content-end mt-4">
+                    <button 
+                        type="button" 
+                        className="btn btn-success"
+                        onClick = {check}>
+                            Save
+                    </button>
+                    <button 
+                        type="button" 
+                        className="btn btn-danger ml-2" 
+                        onClick = {()=> history.push('/feed')}>
+                            Cancel
+                    </button>
+                </div>
+            {/* )} */}
+            </div>
             {changePassword && (
                 <ChangePassword
                     user = {user}

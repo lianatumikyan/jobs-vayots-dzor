@@ -72,9 +72,9 @@ const SignIn = ({ getUser }) => {
                                     required
                                     onChange={(e) => setUser({...user, password: e.target.value})}
                                     onKeyUp={(e) => {if (e.keyCode === 13) check()}}/>
-                                <span className="input-group-text">
+                                {/* <span className="input-group-text">
                                     <i className="fa-eye fa-eye-slash"></i>
-                                </span>
+                                </span> */}
                             </div>
                             {errors.password &&(
                                 <div style ={{color: 'red', fontSize: 14 + 'px'}} className = 'mb-2'>
@@ -88,11 +88,11 @@ const SignIn = ({ getUser }) => {
                                     <span>Invalid Credentials</span>
                                 </div>
                             )}
-                            <div className="row align-items-center remember">
+                            {/* <div className="row align-items-center remember">
                                 <label>
                                     <input type="checkbox"/>Remember Me
                                 </label>
-                            </div>
+                            </div> */}
                             <div className="form-group">
                                 <button
                                     className="btn float-right login_btn" 
