@@ -13,7 +13,7 @@ const Main = ({allJobs, setPage, page, pageCount, getAllJobs, setAllJobs })=> {
                  }
             })
             .then((responce) => {
-                console.log('its okay', responce)
+                // console.log('its okay', responce)
                 return getAllJobs()
             })
             .catch((err)=>{
@@ -24,7 +24,7 @@ const Main = ({allJobs, setPage, page, pageCount, getAllJobs, setAllJobs })=> {
     }
 
     const deleteJob = (jobId) => {
-        console.log(allJobs)
+        // console.log(allJobs)
 
         axios
             .delete(`http://localhost:3020/v1/jobs/${jobId}`, {
@@ -33,7 +33,7 @@ const Main = ({allJobs, setPage, page, pageCount, getAllJobs, setAllJobs })=> {
                 }
             })
             .then((resp) => {
-                console.log('resp', resp)
+                // console.log('resp', resp)
                 // const filteredJobs = allJobs.filter(job => job.id !== jobId)  
                 // setAllJobs(filteredJobs) 
                 return getAllJobs()

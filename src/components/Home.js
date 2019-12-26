@@ -1,11 +1,24 @@
-import React, { PureComponent } from 'react'
+import React, { useReducer } from 'react'
 import { Link} from 'react-router-dom'
-// import {Doughnut} from 'react-chartjs-2';
-// import {PieChart, Pie, Sector, Cell } from 'recharts'
-// import DonutChart from 'react-donut-chart';
 import CountUp from 'react-countup';
+import MainUser from './MainUser'
+import './Home.scss'
 
-const Home = ({jobCount, talentCount, employersCount}) => {
+import { Carousel } from 'react-responsive-carousel';
+
+const Home = ({jobCount, talentCount, employersCount, allJobs,  setPage, page, pageCount}) => {
+
+ 
+// const properties = {
+//   duration: 5000,
+//   transitionDuration: 500,
+//   infinite: true,
+//   indicators: true,
+//   arrows: true,
+//   onChange: (oldIndex, newIndex) => {
+//     console.log(`slide transition from ${oldIndex} to ${newIndex}`);
+//   }
+// }
     
     return (
         <div>
@@ -51,7 +64,7 @@ const Home = ({jobCount, talentCount, employersCount}) => {
                                 </div>
                             </div>
                             <div className="d-flex row" style={{color: 'white'}}>
-                                {console.log(jobCount, talentCount, employersCount, 'count')}
+                                {/* {console.log(jobCount, talentCount, employersCount, 'count')} */}
                                 <div className = "col-md-4">
                                     <div className="d-flex align-items-center justify-content-center mb-2">
                                         <strong>
@@ -91,6 +104,30 @@ const Home = ({jobCount, talentCount, employersCount}) => {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="slide-container">
+                    <Carousel >
+                        <div style = {{height: 350 +'px', width: 100+'%'}}>
+                            <img src="https://www.frescodesign.com.hk/wp-content/uploads/how-digital-marketing-can-help-your-business-grow.jpg" />
+                            {/* <p className="legend">Legend 1 {user.firstName } </p> */}
+                        </div>
+                        <div>
+                            <img src="https://www.frescodesign.com.hk/wp-content/uploads/how-digital-marketing-can-help-your-business-grow.jpg" />
+                            <p className="legend">Legend 2</p>
+                        </div>
+                        <div>
+                            <img src="https://www.frescodesign.com.hk/wp-content/uploads/how-digital-marketing-can-help-your-business-grow.jpg" />
+                            <p className="legend">Legend 3</p>
+                        </div>
+                    </Carousel>
+                </div>
+                <div>
+                    <MainUser
+                        allJobs = {allJobs}  
+                        setPage = {setPage}
+                        page = {page}
+                        pageCount = {pageCount}
+                    />
                 </div>
          </main>
          

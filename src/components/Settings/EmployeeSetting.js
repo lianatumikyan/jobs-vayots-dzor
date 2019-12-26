@@ -9,7 +9,7 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
     const [changePassword, setChangePassword] = useState(false)
     const [changeUser, setChangeUser] = useState(user)
 
-    console.log(user, 'user')
+    // console.log(user, 'user')
 
     const [location, setLocation] = useState(null)
     const [skills, setSkills] = useState(null)
@@ -21,6 +21,7 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
         const skillsCopy = skills.map(skill => {
             return skill.name
         })
+        console.log(bio, 'bio')
 
         axios
             .put('http://localhost:3020/v1/users',{
@@ -31,7 +32,8 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             })
-            .then(() => {
+            .then((data) => {
+                console.log(data, 'data')
                 // history.push('/')
                 return getUser()
             })
@@ -93,16 +95,20 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
     })
 
     useEffect(() => {
-        if(user.info !== null){
+        // if(user.info !== null){
             setSkills(user.info.skills)
             setBio(user.info.bio)
             setEducation(user.info.educations)
-        }
-        setLocation(user.location)
-    }, [user.info, user])
+        // }
+        // setLocation(user.location)
+    }, [])
 
     return (
+        
         <div className = "setting_div">
+            {/* {user && ( */}
+                {/* <div> */}
+
             {!changePassword && ( 
                 <div>
             <div>
@@ -192,8 +198,9 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                             onChange={(e) => setChangeUser({...changeUser, dob: e.target.value})} />
                     </label>
                 </div>
-                <div >
+                {/* <div >
                     <label  className="form-group d-flex">
+                        {console.log(user)}
                         <strong className="col-md-4">Location</strong>
                         <div className="col-md-8 p-0 d-flex ">
                             <input 
@@ -205,7 +212,7 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                             <input 
                                 type="text" 
                                 placeholder="State" 
-                                value = {location.state || ''}
+                                // value = {location.state || ''}
                                 className="form-control"
                                 onChange={(e) => setLocation({...location, state: e.target.value})}/>
                             <input 
@@ -222,7 +229,7 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                                 onChange={(e) => setLocation({...location, zipCode: e.target.value})}/>
                         </div>
                     </label>
-                </div> 
+                </div>  */}
             {/* <div>
                 <label className="form-group d-flex">
                     <strong className="col-md-4">Phone number</strong>
@@ -241,41 +248,41 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                         <strong className="col-md-4">Biography</strong>
                         <input 
                             type="text" 
-                            value={bio}
+                            value={bio || ''}
                             id = 'bio'
                             className="form-control"
                             placeholder = 'Biography'
                             onChange={(e) => setBio(e.target.value)}/>
                     </label>
                 </div>
-                <div >
+                {/* <div >
                     <label  className="form-group d-flex">
                         <strong className="col-md-4">Education</strong>
                         {education.map((item, i) => {
-                            <div key = {`education-${i}`}>
-                                <div className="col-md-8 p-1 d-flex ">
+                            <div key = {`education-${i}`}> */}
+                                {/* <div className="col-md-8 p-1 d-flex ">
                                     <input 
                                         type="text" 
                                         placeholder="Name" 
                                         // value =  {item[i].name }
                                         className="form-control"
-                                        onChange = {(e) => updateEducation(e, i)}/>
+                                        onChange = {(e) => updateEducation(e, i)}/> */}
                                         {/* // onChange={(e) => setEducation({...education, name: e.target.value})}/> */}
-                                    <input 
+                                    {/* <input 
                                         type="text" 
                                         placeholder="Date" 
                                         // value = {item[i].date}
                                         className="form-control"
-                                        onChange = {(e) => updateEducation(e, i)}/>
+                                        onChange = {(e) => updateEducation(e, i)}/> */}
                                         {/* onChange={(e) => setEducation({...education, date: e.target.value})}/> */}
-                                    <input 
+                                    {/* <input 
                                         type="text" 
                                         placeholder="Degree" 
                                         // value = {item[i].degree}
                                         className="form-control"
-                                        onChange = {(e) => updateEducation(e, i)}/>
+                                        onChange = {(e) => updateEducation(e, i)}/> */}
                                         {/* onChange={(e) => setEducation({...education, degree: e.target.value})}/> */}
-                                </div>
+                                {/* </div>
                                 <button 
                                     className='btn btn-danger'
                                     onClick={() => setEducation(education.filter(( index) => i !== index))}>
@@ -290,7 +297,7 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                                 +
                         </button>
                     </label>
-                </div>
+                </div> */}
 
             <div>
                 <label className="form-group d-flex">
@@ -369,45 +376,16 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
         />
     )}
     </div>
+            // )}
+            // </div>
     )
+    
+    
 }
 
 export default EmployeeSetting
 
-// axios({
-//     method: 'put',
-//     headers: {
-//         'Authorization': `Bearer ${localStorage.getItem('token')}`
-//     },
-//     url: 'http://localhost:3020/v1/users/avatar',
-//     data: {
-//         data
-//     }
-
-
-  {/* { && benefits.map((item, i) => (
-                            <div key={`benefits-${i}`}>
-                                <input 
-                                    value={item.value}
-                                    type="text" 
-                                    className="form-control"
-                                    onChange={e => updateBenefits(e, i)}/>
-                                <button 
-                                    className='btn btn-danger'
-                                    onClick={() => setBenefit(benefits.filter(( index) => i !== index))}>
-                                        -
-                                </button>
-                            </div> 
-                        ))} */}
-                        {/* <button 
-                            className="btn btn-default" 
-                            onClick={() => {
-                                let elmnt = document.getElementById("edu");
-                                let div_elmnt = document.getElementById("div_edu");
-                                let cln = elmnt.cloneNode(true);
-                                div_elmnt.appendChild(cln);
-                            }}>
-                                +
-                        </button> */}
-                {/* </label>
-            </div> */}
+{/* </div> */}
+                {/* </div> */}
+            {/* // )}
+    // ) */}

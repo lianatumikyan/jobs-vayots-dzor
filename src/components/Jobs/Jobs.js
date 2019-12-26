@@ -91,7 +91,7 @@ const Jobs = ({ allJobs,  setPage, page, pageCount, getAllJobs, setQuery}) => {
                                 }
                                 return (
                                     <div key = {number} className = 'page_div' onClick={() => setPage(number)}>
-                                        <p id = 'name'> {number} </p>
+                                        <p> {number} </p>
                                     </div>
                                     ) 
                             })
@@ -107,7 +107,7 @@ const Jobs = ({ allJobs,  setPage, page, pageCount, getAllJobs, setQuery}) => {
                                 }
                                 return (
                                     <div key = {number} className = 'page_div' onClick={() => setPage(number)}>
-                                        <p id = 'name'> {number} </p>
+                                        <p> {number} </p>
                                     </div>
                                     )
                             })

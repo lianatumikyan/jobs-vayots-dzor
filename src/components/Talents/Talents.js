@@ -2,31 +2,7 @@ import React, {useState, useEffect} from 'react'
 import { Link } from 'react-router-dom'
 import './Talent.scss'
 
-const Talents = ({allTalents, talentPageCount, getTalents, setQuery}) => {
-
-    // const [notes, setNotes] = useState([])
-    const [page, setPage] = useState(1)
-    // const [pageCount, setPageCount] = useState(null)
-
-    // const getTalents = () => {
-    //     const limit = 4;
-    //     const offset = (page-1) * limit
-
-    //     axios
-    //         .get('http://localhost:3020/v1/users', { params: { limit, offset, type: 'employee' } })
-    //         .then(response => {
-    //             console.log(response, 'talents')
-    //             setPageCount(response.data._meta.pageCount)
-    //             setNotes(response.data.users)  
-    //             setTalentsCount(response.data._meta.total)            
-    //         })
-    //         .catch(console.log)
-
-    // }
-
-    useEffect(() => {
-        getTalents()
-    }, [page])
+const Talents = ({allTalents, talentPageCount, getTalents, setQuery, setPageTalent, pageTalent}) => {
 
     const pageLimit = 5
     const pageNumbers = [];
@@ -101,8 +77,8 @@ const Talents = ({allTalents, talentPageCount, getTalents, setQuery}) => {
                     </div>
                 </div>
                 <div className = "d-flex justify-content-center">
-                    {page > 1 && (
-                        <button onClick={() => setPage(page - 1)}>
+                    {pageTalent > 1 && (
+                        <button onClick={() => setPageTalent(pageTalent - 1)}>
                             Previous
                         </button>
                     )}
@@ -110,40 +86,40 @@ const Talents = ({allTalents, talentPageCount, getTalents, setQuery}) => {
                         <div className = "pagination d-flex justify-content-center">
                         {pageLimit >= talentPageCount && (
                             pageNumbers.map((number, e) => {
-                                if(page === number) {
+                                if(pageTalent === number) {
                                     return (
-                                    <div key = {number} className = 'active d-flex align-items-center' onClick={() => setPage(number)}>
+                                    <div key = {number} className = 'active d-flex align-items-center' onClick={() => setPageTalent(number)}>
                                         <p> {number} </p>
                                     </div>
                                     ) 
                                 }
                                 return (
-                                    <div key = {number} className = 'page_div' onClick={() => setPage(number)}>
-                                        <p id = 'name'> {number} </p>
+                                    <div key = {number} className = 'page_div' onClick={() => setPageTalent(number)}>
+                                        <p > {number} </p>
                                     </div>
                                     ) 
                             })
                         )}
                         {pageLimit< talentPageCount && (
                             staticPageNumbers.map(number => {
-                                if(page === number) {
+                                if(pageTalent === number) {
                                     return (
-                                    <div key = {number} className = 'active d-flex align-items-center' onClick={() => setPage(number)}>
+                                    <div key = {number} className = 'active d-flex align-items-center' onClick={() => setPageTalent(number)}>
                                         <p> {number} </p>
                                     </div>
                                     ) 
                                 }
                                 return (
-                                    <div key = {number} className = 'page_div' onClick={() => setPage(number)}>
-                                        <p id = 'name'> {number} </p>
+                                    <div key = {number} className = 'page_div' onClick={() => setPageTalent(number)}>
+                                        <p> {number} </p>
                                     </div>
                                     )
                             })
                         )}
                     </div>
                     )}
-                    {page < talentPageCount && (
-                        <button onClick={() => setPage(page + 1)}>
+                    {pageTalent < talentPageCount && (
+                        <button onClick={() => setPageTalent(pageTalent + 1)}>
                             Next
                         </button>
                     )}

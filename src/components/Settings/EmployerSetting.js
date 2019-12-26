@@ -65,6 +65,13 @@ const EmployerSetting = ({ getUser, user, logout }) => {
 
     }, [user.info])
 
+    let gender = document.getElementsByName("gender");
+    gender.forEach(data => {
+        if(user.gender === data.value.toLowerCase()){
+            data.setAttribute('checked', true)
+        }
+    })
+
     return (
         <div className = "position-relative setting_div" style = {{height: 700+'px'}}>
             <div className="col-md-9 d-flex justify-content-end">

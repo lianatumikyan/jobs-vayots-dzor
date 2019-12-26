@@ -65,7 +65,7 @@ const EditJob = () => {
                 
             })
             .then((resp) => {
-                console.log(resp, 'resp')
+                // console.log(resp, 'resp')
                 return getJobs()
             }) 
             .catch(console.log)

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-const MainUser = ({ allJobs,  setPage, page, pageCount, getAllJobs, setQuery}) => {
+const MainUser = ({ allJobs,  setPage, page, pageCount }) => {
 
     const pageLimit = 5
     const pageNumbers = [];

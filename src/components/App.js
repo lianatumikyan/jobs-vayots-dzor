@@ -79,7 +79,7 @@ const App = () => {
                 }
             })
             .then(response => {
-                console.log(response.data.jobs[0], 'jobs')
+                // console.log(response, 'jobs')
                 setAllJobs(response.data.jobs)
                 setPageCount(response.data._meta.pageCount)
                 setJobCount(response.data._meta.total)
@@ -88,10 +88,20 @@ const App = () => {
             .catch(console.log)
 
     }
-
+    // const salaryArray = allJobs.map(job => {
+    //     return job.salary.split('-')[1]
+    // })
+    // const largest = salaryArray.sort(function(a,b) {
+    //     if (a < b) { return 1; }
+    //     else if (a == b) { return 0; }
+    //     else { return -1; }
+    // });
+    // console.log(largest.slice(0, 3))
+    // console.log(Math.max(...array), 'araaay')
+    const [pageTalent, setPageTalent] = useState(1)
     const getTalents = () => {
         const limit = 4;
-        const offset = (page-1) * limit
+        const offset = (pageTalent-1) * limit
         let q = query
 
         axios
@@ -139,7 +149,7 @@ const App = () => {
         if (localStorage.getItem('token')) {
             getUser()
         }
-    }, [page])
+    }, [page, pageTalent])
 
     return (
         <div>
@@ -220,6 +230,10 @@ const App = () => {
                         talentCount = {talentCount}
                         jobCount = {jobCount}
                         employersCount = {employersCount}
+                        allJobs = {allJobs}
+                        page = {page}
+                        setPage = {setPage}
+                        pageCount = {pageCount}
                     /> </Route>
                 )}
                 <Route path = "/about-us"> <AboutUs/> </Route>
@@ -235,6 +249,8 @@ const App = () => {
                     allTalents = {allTalents}
                     getTalents = {getTalents}
                     setQuery = {setQuery}
+                    pageTalent = {pageTalent}
+                    setPageTalent = {setPageTalent}
                     talentPageCount = {talentPageCount}
                 /> </Route>
                 <Route path = "/sign-in"> <SignIn getUser={getUser}/> </Route>

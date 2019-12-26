@@ -15,7 +15,7 @@ const OneJob = () => {
             .get(`http://localhost:3020/v1/jobs/${oneJobId}`)
             .then(response => {
                 setJob(response.data.job)
-                console.log(response)
+                // console.log(response)
                 setLocation(response.data.job.location)
                 setUser(response.data.job.user)
             })
