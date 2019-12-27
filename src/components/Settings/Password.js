@@ -10,6 +10,7 @@ const Password = () => {
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('')
     const [password, setPassword] = useState('')
+    
     const getEmail = (e) => {
         setEmail(e.target.value)
     }

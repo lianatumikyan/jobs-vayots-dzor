@@ -11,10 +11,11 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
 
     // console.log(user, 'user')
 
-    const [location, setLocation] = useState(null)
+    const [location, setLocation] = useState(user.location)
     const [skills, setSkills] = useState(null)
     const [education, setEducation] = useState(null)
     const [bio, setBio] = useState(null)
+    console.log(user, 'user')
 
     const check = () => {
 
@@ -83,8 +84,10 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
     }
 
     const addEducations = () => {
-        const newEducation = [...education, ...[{name: '', date: '', degree: ''}]]
-        setEducation(newEducation)
+        const newEducation = [education, ...[{name: ''}]]
+        const newDate = [education, ...[{date: ''}]]
+        const newDaegree = [education, ...[{degree: ''}]]
+        setEducation(newEducation, newDate, newDaegree)
     }
 
     let gender = document.getElementsByName("gender");
@@ -95,13 +98,13 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
     })
 
     useEffect(() => {
-        // if(user.info !== null){
+        if(user.info !== null){
             setSkills(user.info.skills)
             setBio(user.info.bio)
             setEducation(user.info.educations)
-        // }
-        // setLocation(user.location)
-    }, [])
+        }
+        
+    }, [user.info])
 
     return (
         
@@ -198,38 +201,37 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                             onChange={(e) => setChangeUser({...changeUser, dob: e.target.value})} />
                     </label>
                 </div>
-                {/* <div >
+                <div >
                     <label  className="form-group d-flex">
-                        {console.log(user)}
                         <strong className="col-md-4">Location</strong>
                         <div className="col-md-8 p-0 d-flex ">
                             <input 
                                 type="text" 
                                 placeholder="Country" 
-                                value =  {location.country || ''}
+                                // value =  {location.country || ''}
                                 className="form-control"
                                 onChange={(e) => setLocation({...location, country: e.target.value})}/>
-                            <input 
+                            {/* <input 
                                 type="text" 
                                 placeholder="State" 
-                                // value = {location.state || ''}
+                                value = {location.state || ''}
                                 className="form-control"
                                 onChange={(e) => setLocation({...location, state: e.target.value})}/>
                             <input 
                                 type="text" 
                                 placeholder="City" 
-                                // value = {location.city || ''}
+                                value = {location.city || ''}
                                 className="form-control"
                                 onChange={(e) => setLocation({...location, city: e.target.value})}/>
                             <input 
                                 type="text" 
                                 placeholder="Zip Code"
-                                // value = {location.zipCode || ''} 
+                                value = {location.zipCode || ''} 
                                 className="form-control"
-                                onChange={(e) => setLocation({...location, zipCode: e.target.value})}/>
+                                onChange={(e) => setLocation({...location, zipCode: e.target.value})}/> */}
                         </div>
                     </label>
-                </div>  */}
+                </div> 
             {/* <div>
                 <label className="form-group d-flex">
                     <strong className="col-md-4">Phone number</strong>
@@ -255,34 +257,35 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                             onChange={(e) => setBio(e.target.value)}/>
                     </label>
                 </div>
-                {/* <div >
+                <div >
                     <label  className="form-group d-flex">
                         <strong className="col-md-4">Education</strong>
-                        {education.map((item, i) => {
-                            <div key = {`education-${i}`}> */}
-                                {/* <div className="col-md-8 p-1 d-flex ">
+                        {education &&  education.slice(1).map((item, i) => {
+
+                            <div key = {`education-${i}`}> 
+                                <div className="col-md-8 p-1 d-flex ">
                                     <input 
                                         type="text" 
                                         placeholder="Name" 
-                                        // value =  {item[i].name }
+                                        value =  {item.name || ''}
                                         className="form-control"
-                                        onChange = {(e) => updateEducation(e, i)}/> */}
+                                        onChange = {(e) => updateEducation(e, i)}/>
                                         {/* // onChange={(e) => setEducation({...education, name: e.target.value})}/> */}
-                                    {/* <input 
+                                    <input 
                                         type="text" 
                                         placeholder="Date" 
-                                        // value = {item[i].date}
+                                        value = {item.date}
                                         className="form-control"
-                                        onChange = {(e) => updateEducation(e, i)}/> */}
+                                        onChange = {(e) => updateEducation(e, i)}/>
                                         {/* onChange={(e) => setEducation({...education, date: e.target.value})}/> */}
-                                    {/* <input 
+                                    <input 
                                         type="text" 
                                         placeholder="Degree" 
-                                        // value = {item[i].degree}
+                                        value = {item.degree}
                                         className="form-control"
-                                        onChange = {(e) => updateEducation(e, i)}/> */}
+                                        onChange = {(e) => updateEducation(e, i)}/>
                                         {/* onChange={(e) => setEducation({...education, degree: e.target.value})}/> */}
-                                {/* </div>
+                                 </div>
                                 <button 
                                     className='btn btn-danger'
                                     onClick={() => setEducation(education.filter(( index) => i !== index))}>
@@ -297,31 +300,77 @@ const EmployeeSetting = ({ user, getUser, logout }) => {
                                 +
                         </button>
                     </label>
+                </div> 
+                {/* <div>
+                    <label className="form-group d-flex mt-4">
+                        <strong className="col-md-4">Skills</strong>
+                        {skills && ( 
+                            <div >
+                                {skills.map((item, i) => (
+                                    <div key={`skill-${i}`}>
+                                        <input 
+                                            type="text" 
+                                            value={item.name}
+                                            id = 'skills'
+                                            className="form-control"
+                                            onChange={(e) => updateSkills(e, i)}/>
+                                        <button 
+                                            className='btn btn-danger'
+                                            onClick={() => setSkills(skills.filter((elem,  index) => i !== index))}>
+                                                -
+                                        </button>
+                                    </div>
+                                ))}
+                                <button 
+                                    className="btn btn-default" 
+                                    onClick={() => addSkills()}>
+                                        +
+                                </button>
+                            </div>
+                        )}
+                    </label>
                 </div> */}
-
             <div>
                 <label className="form-group d-flex">
                     <strong className="col-md-4">Skills</strong>
-                    {skills.map((item, i) => (
-                        <div key={`skills-${i}`}>
-                            <input 
-                                type="text" 
-                                value={item.name}
-                                id = 'skills'
-                                className="form-control"
-                                onChange={(e) => updateSkills(e, i)}/>
-                            <button 
-                                className='btn btn-danger'
-                                onClick={() => setSkills(skills.filter((elem,  index) => i !== index))}>
-                                    -
-                            </button>
-                        </div>
-                    ))}
+                    {skills && skills.map((item, i) => (
+                                    <div key={`skill-${i}`}>
+                                        <input 
+                                            value={item.value}
+                                            type="text" 
+                                            className="form-control"
+                                            onChange={e => updateSkills(e, i)}/>
+                                        <button 
+                                            className='btn btn-danger'
+                                            onClick={() => setSkills(skills.filter((elem,  index) => i !== index))}>
+                                                -
+                                        </button>
+                                    </div>
+                                ))}
+                    {/* {skills && (
+                        <div>
+                            {skills.map((item, i) => (
+                                <div key={`skills-${i}`}>
+                                    <input 
+                                        type="text" 
+                                        value={item.name}
+                                        id = 'skills'
+                                        className="form-control"
+                                        onChange={(e) => updateSkills(e, i)}/>
+                                    <button 
+                                        className='btn btn-danger'
+                                        onClick={() => setSkills(skills.filter((elem,  index) => i !== index))}>
+                                            -
+                                    </button>
+                                </div>
+                                ))} */}
                     <button 
                         className="btn btn-default" 
                         onClick={() => addSkills()}>
                             +
                     </button>
+                        {/* </div>
+                    )} */}
                 </label>
             </div>
             {/* <div id='div_lang' className = "d-flex row">

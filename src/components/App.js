@@ -63,7 +63,6 @@ const App = () => {
     const [talentCount, setTalentCount] = useState(null)
     const [employersCount, setEmployersCount] = useState(null)
     const [query, setQuery] = useState('')
-    // const [filter, setFilter] = useState('')
 
     const getAllJobs = () => {
         const limit = 4;
@@ -79,7 +78,6 @@ const App = () => {
                 }
             })
             .then(response => {
-                // console.log(response, 'jobs')
                 setAllJobs(response.data.jobs)
                 setPageCount(response.data._meta.pageCount)
                 setJobCount(response.data._meta.total)
@@ -88,6 +86,17 @@ const App = () => {
             .catch(console.log)
 
     }
+    // const [info, setInfo] = useState('')
+
+    // for(let i = 0; i < slideInfo.length; i++) {
+
+    //     setInfo(slideInfo[i])
+
+    //     // console.log(slideInfo[i])
+    // }
+    // console.log(info)
+
+
     // const salaryArray = allJobs.map(job => {
     //     return job.salary.split('-')[1]
     // })
@@ -96,9 +105,11 @@ const App = () => {
     //     else if (a == b) { return 0; }
     //     else { return -1; }
     // });
-    // console.log(largest.slice(0, 3))
-    // console.log(Math.max(...array), 'araaay')
+
+
     const [pageTalent, setPageTalent] = useState(1)
+
+
     const getTalents = () => {
         const limit = 4;
         const offset = (pageTalent-1) * limit
@@ -204,25 +215,18 @@ const App = () => {
                     <Route exact path = "/feed">
                         {user.accountType === 'employers' ? (
                             <Main
-                                setAllJobs = {setAllJobs}
                                 allJobs = {allJobs} 
                                 getAllJobs = {getAllJobs}
                                 setPage =  {setPage}
                                 page = {page}
-                                pageCount = {pageCount}
-                                user = {user}
-                                logout = {logout}/>
+                                pageCount = {pageCount}/>
                         ): (
                             <MainUser
                                 allJobs = {allJobs}
                                 page = {page}
                                 setPage = {setPage}
-                                setQuery = {setQuery}
-                                pageCount = {pageCount}
-                                getAllJobs = {getAllJobs}
-                            />
+                                pageCount = {pageCount}/>
                         )
-                       
                     }
                     </Route>
                 ) : (
@@ -256,30 +260,21 @@ const App = () => {
                 <Route path = "/sign-in"> <SignIn getUser={getUser}/> </Route>
                 <Route path = "/sign-up"> <SignUp getUser={getUser}/> </Route>
                 {user && (
-                    // <>
-                        <Route path = "/settings">
-                            {user.accountType === 'employers' ? (
-                                <EmployerSetting
-                                    getUser = {getUser}
-                                    setAllJobs = {setAllJobs}
-                                    allJobs = {allJobs} 
-                                    getAllJobs = {getAllJobs}
-                                    setPage =  {setPage}
-                                    page = {page}
-                                    pageCount = {pageCount}
-                                    user = {user}
-                                    logout = {logout}
-                                    /> 
-                            ) : (
-                                <EmployeeSetting
-                                    user = {user}
-                                    getUser = {getUser}
-                                    logout = {logout}
-                                />
-                            )}
-                        </Route>
-                        //  </> 
-                        
+                    <Route path = "/settings">
+                        {user.accountType === 'employers' ? (
+                            <EmployerSetting
+                                getUser = {getUser}
+                                user = {user}
+                                logout = {logout}
+                                /> 
+                        ) : (
+                            <EmployeeSetting
+                                user = {user}
+                                getUser = {getUser}
+                                logout = {logout}
+                            />
+                        )}
+                    </Route>
                 )}
                 <Route path="/settings:jobId">
                     <EditJob/>

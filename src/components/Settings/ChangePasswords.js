@@ -2,8 +2,10 @@ import React, {useState } from 'react';
 import axios from 'axios';
 
 const ChangePassword = ({setChangePassword, user, logout}) => {
+    
     const [errors, setErrors] = useState({ current: false, new: false, confirm: false })
     const [confirm, setConfirm] = useState('')
+
     const [changedPassword, setPassword] = useState({
         password: '',
         newPassword: ''

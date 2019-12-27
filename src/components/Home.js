@@ -1,7 +1,8 @@
-import React, { useReducer } from 'react'
-import { Link} from 'react-router-dom'
+import React, {  useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import CountUp from 'react-countup';
 import MainUser from './MainUser'
+import axios from 'axios'
 import './Home.scss'
 
 import { Carousel } from 'react-responsive-carousel';
@@ -19,6 +20,29 @@ const Home = ({jobCount, talentCount, employersCount, allJobs,  setPage, page, p
 //     console.log(`slide transition from ${oldIndex} to ${newIndex}`);
 //   }
 // }
+    const [info, setInfo] = useState('')
+
+    const getAllJobs = () => {
+
+        axios
+            .get('http://localhost:3020/v1/jobs',
+            {
+                headers: {
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            .then(response => {
+
+                setInfo(response.data.forSlide.job)
+                
+            })
+            .catch(console.log)
+
+    }
+
+    useEffect(() => {
+        getAllJobs()
+    }, [])
     
     return (
         <div>
@@ -105,22 +129,24 @@ const Home = ({jobCount, talentCount, employersCount, allJobs,  setPage, page, p
                         </div>
                     </div>
                 </div>
-                <div className="slide-container">
-                    <Carousel >
-                        <div style = {{height: 350 +'px', width: 100+'%'}}>
-                            <img src="https://www.frescodesign.com.hk/wp-content/uploads/how-digital-marketing-can-help-your-business-grow.jpg" />
-                            {/* <p className="legend">Legend 1 {user.firstName } </p> */}
-                        </div>
-                        <div>
-                            <img src="https://www.frescodesign.com.hk/wp-content/uploads/how-digital-marketing-can-help-your-business-grow.jpg" />
-                            <p className="legend">Legend 2</p>
-                        </div>
-                        <div>
-                            <img src="https://www.frescodesign.com.hk/wp-content/uploads/how-digital-marketing-can-help-your-business-grow.jpg" />
-                            <p className="legend">Legend 3</p>
-                        </div>
-                    </Carousel>
-                </div>
+                    {info && (
+                        <div className="slide-container">
+                        <Carousel >
+                            <div>
+                                <img src = {info[0].user.avatar}/>
+                                <p className="legend"> {info[0].user.firstName} {info[0].user.lastName}  </p>
+                            </div>
+                            <div>
+                                <img src = {info[1].user.avatar}/>
+                                <p className="legend"> {info[1].user.firstName} {info[1].user.lastName}  </p>
+                            </div>
+                            <div>
+                                <img src = {info[2].user.avatar}/>
+                                <p className="legend"> {info[2].user.firstName} {info[2].user.lastName}  </p>
+                            </div>
+                        </Carousel>
+                    </div>
+                    )}
                 <div>
                     <MainUser
                         allJobs = {allJobs}  

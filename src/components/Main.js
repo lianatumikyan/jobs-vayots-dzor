@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import axios from 'axios'
 // import './EmployerSetting.scss'
 
-const Main = ({allJobs, setPage, page, pageCount, getAllJobs, setAllJobs })=> {
+const Main = ({allJobs, setPage, page, pageCount, getAllJobs, user, logout })=> {
     const getArchive = (jobId) => {
 
         axios
@@ -12,19 +12,16 @@ const Main = ({allJobs, setPage, page, pageCount, getAllJobs, setAllJobs })=> {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                  }
             })
-            .then((responce) => {
-                // console.log('its okay', responce)
+            .then(() => {
                 return getAllJobs()
             })
             .catch((err)=>{
-                // console.log({'Authorization': `Bearer ${localStorage.getItem('token')}`})
                 console.log('kj', err)
             })
 
     }
 
     const deleteJob = (jobId) => {
-        // console.log(allJobs)
 
         axios
             .delete(`http://localhost:3020/v1/jobs/${jobId}`, {
@@ -32,12 +29,8 @@ const Main = ({allJobs, setPage, page, pageCount, getAllJobs, setAllJobs })=> {
                     'Authorization': `Bearer ${localStorage.getItem('token')}`
                 }
             })
-            .then((resp) => {
-                // console.log('resp', resp)
-                // const filteredJobs = allJobs.filter(job => job.id !== jobId)  
-                // setAllJobs(filteredJobs) 
+            .then(() => {
                 return getAllJobs()
-                // return getJobs()
             })
             .catch(console.log)
     }
@@ -66,7 +59,6 @@ const Main = ({allJobs, setPage, page, pageCount, getAllJobs, setAllJobs })=> {
 
     useEffect(()=>{
         getAllJobs()
-        // getArchive()
     }, [])
 
     return (
@@ -83,11 +75,6 @@ const Main = ({allJobs, setPage, page, pageCount, getAllJobs, setAllJobs })=> {
                                 </button>
                             </Link>
                         </div>
-                        {/* <div className="col-md-9 d-flex justify-content-end">
-                            <label className="form-group d-flex mt-4">
-                                <strong className="row_password" style={{cursor: 'pointer'}} onClick = {() => setChangePassword(true)}>Change Password</strong>
-                            </label>
-                        </div> */}
                     </div>
                     <div className = "col-md-11">
                         {allJobs.map((note, i) =>{
@@ -174,7 +161,7 @@ const Main = ({allJobs, setPage, page, pageCount, getAllJobs, setAllJobs })=> {
                                         }
                                         return (
                                             <div key = {number} className = 'page_div' onClick={() => setPage(number)}>
-                                                <p id = 'name'> {number} </p>
+                                                <p> {number} </p>
                                             </div>
                                             ) 
                                     })
@@ -190,7 +177,7 @@ const Main = ({allJobs, setPage, page, pageCount, getAllJobs, setAllJobs })=> {
                                         }
                                         return (
                                             <div key = {number} className = 'page_div' onClick={() => setPage(number)}>
-                                                <p id = 'name'> {number} </p>
+                                                <p> {number} </p>
                                             </div>
                                         )
                                     })
